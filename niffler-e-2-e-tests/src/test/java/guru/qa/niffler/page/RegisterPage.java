@@ -3,6 +3,7 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static guru.qa.niffler.util.DataUtil.getRandomUserName;
 
@@ -43,5 +44,17 @@ public class RegisterPage {
         signInButton.click();
         return this;
     }
+
+    @Step ("Check Error message")
+    public RegisterPage checkSuccessMessage(){
+        successMessage.shouldBe(visible);
+        return this;
+    }
+    @Step ("Check Error message")
+    public RegisterPage checkErrorMessage(){
+        errorMessageUserAlreadyExist.shouldBe(visible);
+        return this;
+    }
+
 
 }
