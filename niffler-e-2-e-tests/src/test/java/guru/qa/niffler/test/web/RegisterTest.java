@@ -27,6 +27,7 @@ public class RegisterTest {
     void shouldRegisterNewUser() {
         String userName = getRandomUserName();
         String userPassword = getRandomPassword();
+
         loginPage.goToRegistrationPage();
         registerPage.fillAndSubmitRegistration(userName, userPassword, userPassword)
                 .checkSuccessMessage()
@@ -39,6 +40,7 @@ public class RegisterTest {
         String userName = getRandomUserName();
         String userPassword = getRandomPassword();
         String userPasswordNew = getRandomPassword();
+
         loginPage.goToRegistrationPage();
         registerPage.fillAndSubmitRegistration(userName, userPassword, userPassword)
                 .checkSuccessMessage()
@@ -54,6 +56,7 @@ public class RegisterTest {
         String userName = getRandomUserName();
         String userPassword = getRandomPassword();
         String userPasswordNew = userPassword.concat("123");
+
         loginPage.goToRegistrationPage();
         registerPage.fillAndSubmitRegistration(userName, userPassword, userPasswordNew)
                 .checkErrorMessageWithText("Passwords should be equal");
@@ -63,6 +66,7 @@ public class RegisterTest {
     void mainPageShouldBeDisplayedAfterSuccessLogin() {
         String userName = getRandomUserName();
         String userPassword = getRandomPassword();
+
         loginPage.goToRegistrationPage();
         registerPage.fillAndSubmitRegistration(userName, userPassword, userPassword)
                 .sighInButtonToLoginPage();
@@ -75,6 +79,7 @@ public class RegisterTest {
         String userName = getRandomUserName();
         String userPassword = getRandomPassword();
         String userPasswordNew = userPassword.concat("123");
+
         loginPage.goToRegistrationPage();
         registerPage.fillAndSubmitRegistration(userName, userPassword, userPassword)
                 .sighInButtonToLoginPage();
