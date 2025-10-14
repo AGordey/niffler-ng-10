@@ -13,9 +13,11 @@ public class MainPage {
   private final SelenideElement spendingTable = $("#spendings");
   private final SelenideElement menuOfUser = $("#PersonIcon");
   private final SelenideElement profileOfUser = $(withText("Profile"));
+  private final SelenideElement statisticsPart = $("#stat");
 
   public MainPage checkThatPageLoaded() {
     spendingTable.should(visible);
+    statisticsPart.should(visible);
     return this;
   }
 

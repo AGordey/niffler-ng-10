@@ -9,8 +9,8 @@ public class DataUtil {
         return faker.name().username();
     }
     public static String getRandomPassword() {
-        return faker.internet().password(5,15);
-    }
+        return faker.internet().password(4,10);
+    } //
     public static String getRandomCategory() {
                 return faker.hipster().word();
     }
