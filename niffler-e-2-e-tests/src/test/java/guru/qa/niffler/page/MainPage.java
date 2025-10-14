@@ -4,10 +4,15 @@ import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 public class MainPage {
   private final SelenideElement spendingTable = $("#spendings");
+  private final SelenideElement menuOfUser = $("#PersonIcon");
+  private final SelenideElement profileOfUser = $(withText("Profile"));
 
   public MainPage checkThatPageLoaded() {
     spendingTable.should(visible);
@@ -22,5 +27,11 @@ public class MainPage {
   public MainPage checkThatTableContains(String description) {
     spendingTable.$$("tbody tr").find(text(description)).should(visible);
     return this;
+  }
+
+  public ProfilePage goToProfilePage() {
+    menuOfUser.click();
+    profileOfUser.click();
+    return new ProfilePage();
   }
 }
