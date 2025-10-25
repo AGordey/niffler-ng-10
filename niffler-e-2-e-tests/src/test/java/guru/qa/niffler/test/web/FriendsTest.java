@@ -1,6 +1,5 @@
 package guru.qa.niffler.test.web;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.UserType;
@@ -11,7 +10,6 @@ import guru.qa.niffler.page.FriendsPage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.PeoplePage;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,11 +25,6 @@ public class FriendsTest {
     MainPage mainPage = new MainPage();
     FriendsPage friendsPage = new FriendsPage();
     PeoplePage peoplePage = new PeoplePage();
-
-    @BeforeAll
-    public static void setUp1() {
-        Configuration.holdBrowserOpen = true;
-    }
 
     @BeforeEach
     void setUp() {
