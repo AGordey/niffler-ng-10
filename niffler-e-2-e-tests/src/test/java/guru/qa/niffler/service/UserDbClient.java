@@ -37,7 +37,7 @@ public class UserDbClient implements UserClient {
         AuthAuthorityEntity[] authorityEntities = Arrays.stream(Authority.values()).map(
                 e -> {
                     AuthAuthorityEntity ae = new AuthAuthorityEntity();
-                    ae.setUser_id(createdAuthUser.getId());
+                    ae.setUserId(createdAuthUser.getId());
                     ae.setAuthority(e);
                     return ae;
                 }
@@ -76,7 +76,7 @@ public class UserDbClient implements UserClient {
                                     //Stream из AuthAuthorityEntity с каждым значением Authority
                                     Stream<AuthAuthorityEntity> entityStream = authorityStream.map(a -> {
                                         AuthAuthorityEntity authAuthEntity = new AuthAuthorityEntity();
-                                        authAuthEntity.setUser_id(authUserEntity.getId());
+                                        authAuthEntity.setUserId(authUserEntity.getId());
                                         authAuthEntity.setAuthority(a);
                                         return authAuthEntity;
                                     });
@@ -98,7 +98,7 @@ public class UserDbClient implements UserClient {
                                     userEntity.setFullname(userJson.fullname());
                                     userEntity.setCurrency(userJson.currency());
 //                                  userEntity.setPhoto и userEntity.setPhotoSmall не использовал т.к. они null
-                                    new UserDataDaoJdbc(connection).create(userEntity);
+                                    new UserdataUserDaoJdbc(connection).create(userEntity);
                                     return userEntity;
                                 }
                                 , CFG.userdataJdbcUrl()
