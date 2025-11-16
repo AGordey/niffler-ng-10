@@ -98,7 +98,7 @@ public class UserDbClient implements UserClient {
                                     userEntity.setFullname(userJson.fullname());
                                     userEntity.setCurrency(userJson.currency());
 //                                  userEntity.setPhoto и userEntity.setPhotoSmall не использовал т.к. они null
-                                    new UserDataDaoJdbc(connection).create(userEntity);
+                                    new UserdataUserDaoJdbc(connection).create(userEntity);
                                     return userEntity;
                                 }
                                 , CFG.userdataJdbcUrl()

@@ -20,7 +20,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public CategoryEntity create(CategoryEntity category) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO category (username, name, archived) " +
+                "INSERT INTO \"category\" (username, name, archived) " +
                         "VALUES (?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
         )) {
@@ -48,7 +48,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public Optional<CategoryEntity> findById(UUID id) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM category WHERE id = ?"
+                "SELECT * FROM \"category\" WHERE id = ?"
         )) {
             ps.setObject(1, id);
             ps.execute(); // Делаем execute тк делаем SELECT a не INSERT
@@ -72,7 +72,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public Optional<CategoryEntity> findByUsernameAndCategoryName(String username, String categoryName) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM category WHERE username = ? AND name = ?"
+                "SELECT * FROM \"category\" WHERE username = ? AND name = ?"
         )) {
             ps.setString(1, username);
             ps.setString(2, categoryName);
@@ -97,7 +97,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public List<CategoryEntity> findAllByUsername(String username) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM category WHERE username = ? "
+                "SELECT * FROM \"category\" WHERE username = ? "
         )) {
             ps.setString(1, username);
             ps.execute();
@@ -121,7 +121,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public void delete(CategoryEntity category) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "DELETE FROM category WHERE id = ? "
+                "DELETE FROM \"category\" WHERE id = ? "
         )) {
             ps.setObject(1, category.getId());
             ps.executeUpdate();
@@ -133,7 +133,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public CategoryEntity update(CategoryEntity category) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "UPDATE category SET name = ?, archived = ? " +
+                "UPDATE \"category\" SET name = ?, archived = ? " +
                         "WHERE id = ?"
         )) {
             ps.setString(1, category.getName());
@@ -149,8 +149,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public List<CategoryEntity> findAll() {
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM category "
-        )) {
+                "SELECT * FROM \"category\" ")) {
             ps.execute();
             List<CategoryEntity> categoriesList = new ArrayList<>();
             try (ResultSet rs = ps.getResultSet()) {
