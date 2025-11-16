@@ -123,7 +123,7 @@ public class Databases {
         }
     }
     //Готовит пул соединений к БД
-    private static DataSource dataSource(String jdbcUrl) {
+    public static DataSource dataSource(String jdbcUrl) {
         return dataSources.computeIfAbsent(  //computeIfAbsent - вернет значение по ключу если оно есть или вычислить значение из лямбды
                 jdbcUrl,
                 key -> {
