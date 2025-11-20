@@ -91,13 +91,7 @@ public class UserDbClient implements UserClient {
                         // и возвращаю объект userEntity, что бы потом преобразовать его в возвращаемый UserJson
                         new Databases.XaFunction<>(
                                 connection -> {
-                                    UserEntity userEntity = new UserEntity();
-                                    userEntity.setUsername(userJson.username());
-                                    userEntity.setFirstname(userJson.firstname());
-                                    userEntity.setSurname(userJson.surname());
-                                    userEntity.setFullname(userJson.fullname());
-                                    userEntity.setCurrency(userJson.currency());
-//                                  userEntity.setPhoto и userEntity.setPhotoSmall не использовал т.к. они null
+                                    UserEntity userEntity = UserEntity.fromJson(userJson);
                                     new UserdataUserDaoJdbc(connection).create(userEntity);
                                     return userEntity;
                                 }

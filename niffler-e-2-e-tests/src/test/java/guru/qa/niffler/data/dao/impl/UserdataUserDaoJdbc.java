@@ -60,7 +60,7 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
             ps.execute();
             List<UserEntity> users = new ArrayList<>();
             try (ResultSet rs = ps.getResultSet()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     UserEntity ce = new UserEntity();
                     ce.setId(rs.getObject("id", UUID.class));
                     ce.setUsername(rs.getString("username"));

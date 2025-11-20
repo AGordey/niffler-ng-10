@@ -33,7 +33,7 @@ public class UserdataUserDaoSpringJdbc implements UserdataUserDao {
                     Statement.RETURN_GENERATED_KEYS
             );
             ps.setString(1, user.getUsername());
-            ps.setString(2, String.valueOf(user.getCurrency()));
+            ps.setString(2, user.getCurrency().name());
             ps.setString(3, user.getFirstname());
             ps.setString(4, user.getSurname());
             ps.setBytes(5, user.getPhoto());
@@ -73,7 +73,7 @@ public class UserdataUserDaoSpringJdbc implements UserdataUserDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return Optional.ofNullable(
                 jdbcTemplate.queryForObject(
-                        "SELECT * FROM \"user\" WHERE id = ?",
+                        "SELECT * FROM \"user\" WHERE username = ?",
                         UserdataUserEntityRowMapper.instance,
                         username
                 )

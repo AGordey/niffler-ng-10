@@ -41,7 +41,7 @@ public class Databases {
 
     //Метод возвращающий значение. Мы получаем, а затем передаем коннекшен в функцию,
     // а функция вызывает внутри себя нужные DAO. Работает с одним соединением
-    //Отличается применение стандартных интерфейсов - здесь Function.
+    //отличается применение стандартных интерфейсов - здесь Function.
     public static <T> T transaction(Function<Connection, T> function, String jdbcUrl, int isolationLevel) {
         Connection connection = null;
         try {
