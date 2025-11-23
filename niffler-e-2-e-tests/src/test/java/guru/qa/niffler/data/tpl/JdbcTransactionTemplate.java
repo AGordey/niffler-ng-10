@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 import static java.sql.Connection.TRANSACTION_READ_COMMITTED;
 
-public class JdbcTransactionTemplate {
+public class JdbcTransactionTemplate { // Обычные транзакции
 
   private final JdbcConnectionHolder holder;
   private final AtomicBoolean closeAfterAction = new AtomicBoolean(true);

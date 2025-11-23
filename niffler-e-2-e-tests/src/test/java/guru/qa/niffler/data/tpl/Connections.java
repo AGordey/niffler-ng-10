@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Connections {
   private Connections() {
   }
-
+//Применяем ConcurrentHashMap для работы из разных потоков
   private static final Map<String, JdbcConnectionHolder> holders = new ConcurrentHashMap<>();
 
   public static JdbcConnectionHolder holder(String jdbcUrl) {

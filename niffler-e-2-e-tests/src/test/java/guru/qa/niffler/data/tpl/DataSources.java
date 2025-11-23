@@ -11,9 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DataSources {
   private DataSources() {
   }
-
+    //Здесь хранится коннекшен к каждой БД (niffler-auth/niffler-currency/niffler-spend/niffler-userdata)
+    // для атомарного доступа ко ключу. Коннекшены вычисляем методом dataSource
   private static final Map<String, DataSource> dataSources = new ConcurrentHashMap<>();
 
+  //Готовит пул соединений к БД
   public static DataSource dataSource(String jdbcUrl) {
     return dataSources.computeIfAbsent(
         jdbcUrl,

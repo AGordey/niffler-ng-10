@@ -18,9 +18,7 @@ import java.util.function.Function;
 
 //Класс для того, что бы создать соединение к БД
 public class Databases {
-    //Здесь хранится коннекшен к каждой БД (niffler-auth/niffler-currency/niffler-spend/niffler-userdata)
-    // для атомарного доступа ко ключу. Коннекшены вычисляем методом dataSource
-    private static final Map<String, DataSource> dataSources = new ConcurrentHashMap<>();
+
     //Long - id потока, и к этому потоку привязваем Map коннектов, которыми оперирует ntcn
     private static final Map<Long, Map<String, Connection>> threadConnections = new ConcurrentHashMap<>();
 
@@ -137,27 +135,6 @@ public class Databases {
             }
             throw new RuntimeException(e);
         }
-    }
-
-    //Готовит пул соединений к БД
-    public static DataSource dataSource(String jdbcUrl) {
-        return dataSources.computeIfAbsent(  //computeIfAbsent - вернет значение по ключу если оно есть или вычислить значение из лямбды
-                jdbcUrl,
-                key -> {
-                    AtomikosDataSourceBean dsBean = new AtomikosDataSourceBean();
-                    final String uniqId = StringUtils.substringAfter(jdbcUrl, "5432/");
-                    dsBean.setUniqueResourceName(uniqId);
-                    dsBean.setXaDataSourceClassName("org.postgresql.xa.PGXADataSource");
-                    Properties props = new Properties();
-                    dsBean.setDefaultIsolationLevel(Connection.TRANSACTION_READ_COMMITTED);
-                    props.put("URL", jdbcUrl);
-                    props.put("user", "postgres");
-                    props.put("password", "secret");
-                    dsBean.setXaProperties(props);
-                    dsBean.setMaxPoolSize(10);
-                    return dsBean;
-                }
-        );
     }
 
     //Этот метод возвращает пул коннекшенов
