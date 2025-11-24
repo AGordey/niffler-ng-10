@@ -29,7 +29,7 @@ public class DataSources {
           props.put("user", "postgres");
           props.put("password", "secret");
           dsBean.setXaProperties(props);
-          dsBean.setPoolSize(3);
+          dsBean.setPoolSize(3);  // ставим 3 потому что запускаем тесты в 3 потока
           dsBean.setMaxPoolSize(10);
           return dsBean;
         }

@@ -9,6 +9,7 @@ public class Connections {
   private Connections() {
   }
 //Применяем ConcurrentHashMap для работы из разных потоков
+  // String - наш ключ = JDBC URL
   private static final Map<String, JdbcConnectionHolder> holders = new ConcurrentHashMap<>();
 
   public static JdbcConnectionHolder holder(String jdbcUrl) {
