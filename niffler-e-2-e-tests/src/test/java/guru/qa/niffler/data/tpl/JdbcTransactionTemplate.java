@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 import static java.sql.Connection.TRANSACTION_READ_COMMITTED;
 // Выполнение обычных транзакций с JDBC без Spring
-public class JdbcTransactionTemplate { // Обычные транзакции
+public class JdbcTransactionTemplate { // Обычная транзакция - в несколько таблиц одной БД
 
   private final JdbcConnectionHolder holder;
   //Применяем такой булеан, что бы его можно было менять
