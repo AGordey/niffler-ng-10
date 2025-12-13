@@ -42,22 +42,24 @@ public class UserdataUserEntityResultSetExtractor implements ResultSetExtractor<
                     throw new RuntimeException(e);
                 }
             });
-            FriendshipEntity friendship = new FriendshipEntity();
-            UserEntity requester = new UserEntity();
-            UUID addresseeId = rs.getObject("addressee_id", UUID.class);
-            requester.setId(addresseeId);
-            UserEntity addressee = new UserEntity();
-            UUID requesterId = rs.getObject("requester_id", UUID.class);
-            addressee.setId(requesterId);
-            friendship.setRequester(requester);
-            friendship.setAddressee(addressee);
-            friendship.setStatus(FriendshipStatus.valueOf(rs.getString("status")));
-            friendship.setCreatedDate(rs.getDate("created_date"));
 
-            if (addresseeId.equals(userId)) {
-                user.getFriendshipAddressees().add(friendship);
-            } else {
-                user.getFriendshipRequests().add(friendship);
+            if (rs.getObject("addressee_id", UUID.class) != null) {
+                FriendshipEntity friendship = new FriendshipEntity();
+                UserEntity requester = new UserEntity();
+                UUID requesterId = rs.getObject("requester_id", UUID.class);
+                requester.setId(requesterId);
+                UserEntity addressee = new UserEntity();
+                UUID addresseeId = rs.getObject("addressee_id", UUID.class);
+                addressee.setId(addresseeId);
+                friendship.setRequester(requester);
+                friendship.setAddressee(addressee);
+                friendship.setStatus(FriendshipStatus.valueOf(rs.getString("status")));
+                friendship.setCreatedDate(rs.getDate("created_date"));
+                if (addresseeId.equals(userId)) {
+                    user.getFriendshipAddressees().add(friendship);
+                } else {
+                    user.getFriendshipRequests().add(friendship);
+                }
             }
         }
         return userMap.get(userId);

@@ -78,13 +78,13 @@ public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
                     if (user == null) {
                         user = UserdataUserEntityRowMapper.instance.mapRow(resultSet, 1);
                     }
-                    if (userId.equals(id)) {
+                    if (resultSet.getObject("addressee_id", UUID.class) != null) {
                         UserEntity requester = new UserEntity();
-                        UUID addresseeId = resultSet.getObject("addressee_id", UUID.class);
-                        requester.setId(addresseeId);
-                        UserEntity addressee = new UserEntity();
                         UUID requesterId = resultSet.getObject("requester_id", UUID.class);
-                        addressee.setId(requesterId);
+                        requester.setId(requesterId);
+                        UserEntity addressee = new UserEntity();
+                        UUID addresseeId = resultSet.getObject("addressee_id", UUID.class);
+                        addressee.setId(addresseeId );
                         FriendshipEntity friendship = new FriendshipEntity();
                         friendship.setRequester(requester);
                         friendship.setAddressee(addressee);
@@ -96,6 +96,7 @@ public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
                         } else {
                             friendshipRequests.add(friendship);
                         }
+
                     }
                 }
                 if (user == null) {
@@ -111,11 +112,12 @@ public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
         }
     }
 
- //Входящее предложение о дружбе (другой юзер запрашивает)
+    //Входящее предложение о дружбе (другой юзер запрашивает)
     @Override
     public void addIncomeInvitation(UserEntity requester, UserEntity addressee) {
         createFriendshipWithStatus(addressee, requester, FriendshipStatus.PENDING);
     }
+
     //Исходящее предложение о дружбе (юзер запрашивает)
     @Override
     public void addOutcomeInvitation(UserEntity requester, UserEntity addressee) {

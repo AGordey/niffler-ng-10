@@ -1,11 +1,9 @@
 package guru.qa.niffler.data.repository.impl;
 
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.data.entity.userdata.FriendshipEntity;
 import guru.qa.niffler.data.entity.userdata.FriendshipStatus;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.data.mapper.UserdataUserEntityResultSetExtractor;
-import guru.qa.niffler.data.mapper.UserdataUserEntityRowMapper;
 import guru.qa.niffler.data.repository.UserdataUserRepository;
 import guru.qa.niffler.data.tpl.DataSources;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,14 +11,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
-
-import static guru.qa.niffler.data.tpl.Connections.holder;
 
 public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository {
 
@@ -71,7 +64,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
 
     @Override
     public void addOutcomeInvitation(UserEntity requester, UserEntity addressee) {
-        createFriendshipWithStatus(requester, addressee, FriendshipStatus.PENDING);
+        createFriendshipWithStatus(addressee, requester, FriendshipStatus.PENDING);
     }
 
     @Override
