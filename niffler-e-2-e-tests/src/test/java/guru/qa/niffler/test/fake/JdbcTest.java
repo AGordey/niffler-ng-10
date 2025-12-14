@@ -7,6 +7,8 @@ import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.service.SpendDbClient;
 import guru.qa.niffler.service.UserDbClient;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Date;
 
@@ -36,21 +38,19 @@ public class JdbcTest {
         System.out.println(spend);
     }
 
-    @Test
-    void xaTxTest() {
-        UserDbClient userDbClient = new UserDbClient();
-        UserJson user = userDbClient.create(
-                new UserJson(
-                        null,
-                        "aleksanr_druz_4",
-                        "user-email-xa",
-                        "user-password-xa",
-                        "user-phone-xa",
-                        CurrencyValues.KZT,
-                        "",
-                        "")
-        );
-        System.out.println(user);
-    }
+    static UserDbClient usersDbClient = new UserDbClient();
 
+    @ValueSource(strings = {
+            "sanek-1"
+    })
+    @ParameterizedTest
+    void springJdbcTest(String uname) {
+        UserJson user = usersDbClient.createUser(
+                uname,
+                "12345"
+        );
+
+        usersDbClient.addIncomeInvitation(user, 1);
+        usersDbClient.addOutcomeInvitation(user, 1);
+    }
 }

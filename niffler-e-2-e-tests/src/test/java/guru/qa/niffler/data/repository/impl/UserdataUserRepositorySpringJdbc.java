@@ -58,6 +58,20 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
     }
 
     @Override
+    public Optional<UserEntity> findByUsername(String username) {
+        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
+        return Optional.ofNullable(template.query(
+                "SELECT * FROM \"user\" u " +
+                        "LEFT JOIN friendship f " +
+                        "ON u.id = f.requester_id OR u.id = f.addressee_id " +
+                        "WHERE username = ?",
+                UserdataUserEntityResultSetExtractor.instance,
+                username
+        ));
+    }
+
+
+    @Override
     public void addIncomeInvitation(UserEntity requester, UserEntity addressee) {
         createFriendshipWithStatus(requester, addressee, FriendshipStatus.PENDING);
     }
