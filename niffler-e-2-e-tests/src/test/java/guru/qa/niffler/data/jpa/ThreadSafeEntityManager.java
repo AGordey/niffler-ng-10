@@ -1,18 +1,7 @@
 package guru.qa.niffler.data.jpa;
 
-import jakarta.persistence.EntityGraph;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.FlushModeType;
-import jakarta.persistence.LockModeType;
-import jakarta.persistence.Query;
-import jakarta.persistence.StoredProcedureQuery;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaDelete;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.*;
+import jakarta.persistence.criteria.*;
 import jakarta.persistence.metamodel.Metamodel;
 
 import javax.annotation.Nonnull;
@@ -81,8 +70,23 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
+  public <T> T find(Class<T> aClass, Object o, FindOption... findOptions) {
+    return null;
+  }
+
+  @Override
+  public <T> T find(EntityGraph<T> entityGraph, Object o, FindOption... findOptions) {
+    return null;
+  }
+
+  @Override
   public <T> T getReference(Class<T> entityClass, Object primaryKey) {
     return threadEm().getReference(entityClass, primaryKey);
+  }
+
+  @Override
+  public <T> T getReference(T t) {
+    return null;
   }
 
   @Override
@@ -111,6 +115,11 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
+  public void lock(Object o, LockModeType lockModeType, LockOption... lockOptions) {
+
+  }
+
+  @Override
   public void refresh(Object entity) {
     threadEm().refresh(entity);
   }
@@ -128,6 +137,11 @@ public class ThreadSafeEntityManager implements EntityManager {
   @Override
   public void refresh(Object entity, LockModeType lockMode, Map<String, Object> properties) {
     threadEm().refresh(entity, lockMode, properties);
+  }
+
+  @Override
+  public void refresh(Object o, RefreshOption... refreshOptions) {
+
   }
 
   @Override
@@ -151,6 +165,26 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
+  public void setCacheRetrieveMode(CacheRetrieveMode cacheRetrieveMode) {
+
+  }
+
+  @Override
+  public void setCacheStoreMode(CacheStoreMode cacheStoreMode) {
+
+  }
+
+  @Override
+  public CacheRetrieveMode getCacheRetrieveMode() {
+    return null;
+  }
+
+  @Override
+  public CacheStoreMode getCacheStoreMode() {
+    return null;
+  }
+
+  @Override
   public void setProperty(String propertyName, Object value) {
     threadEm().setProperty(propertyName, value);
   }
@@ -168,6 +202,11 @@ public class ThreadSafeEntityManager implements EntityManager {
   @Override
   public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteriaQuery) {
     return threadEm().createQuery(criteriaQuery);
+  }
+
+  @Override
+  public <T> TypedQuery<T> createQuery(CriteriaSelect<T> criteriaSelect) {
+    return null;
   }
 
   @Override
@@ -193,6 +232,11 @@ public class ThreadSafeEntityManager implements EntityManager {
   @Override
   public <T> TypedQuery<T> createNamedQuery(String name, Class<T> resultClass) {
     return threadEm().createNamedQuery(name, resultClass);
+  }
+
+  @Override
+  public <T> TypedQuery<T> createQuery(TypedQueryReference<T> typedQueryReference) {
+    return null;
   }
 
   @Override
@@ -293,5 +337,15 @@ public class ThreadSafeEntityManager implements EntityManager {
   @Override
   public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> entityClass) {
     return threadEm().getEntityGraphs(entityClass);
+  }
+
+  @Override
+  public <C> void runWithConnection(ConnectionConsumer<C> connectionConsumer) {
+
+  }
+
+  @Override
+  public <C, T> T callWithConnection(ConnectionFunction<C, T> connectionFunction) {
+    return null;
   }
 }
