@@ -58,19 +58,61 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
     }
 
     @Override
-    public void addIncomeInvitation(UserEntity requester, UserEntity addressee) {
-        createFriendshipWithStatus(requester, addressee, FriendshipStatus.PENDING);
+    public Optional<UserEntity> findByUsername(String username) {
+        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
+        return Optional.ofNullable(template.query(
+                "SELECT * FROM \"user\" u " +
+                        "LEFT JOIN friendship f " +
+                        "ON u.id = f.requester_id OR u.id = f.addressee_id " +
+                        "WHERE username = ?",
+                UserdataUserEntityResultSetExtractor.instance,
+                username
+        ));
     }
 
     @Override
-    public void addOutcomeInvitation(UserEntity requester, UserEntity addressee) {
-        createFriendshipWithStatus(addressee, requester, FriendshipStatus.PENDING);
+    public UserEntity update(UserEntity user) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE \"user\" SET " +
+                            "username = ?, currency = ?, " +
+                            "firstname = ?, surname = ?, photo = ?, " +
+                            "photo_small = ?, full_name = ? " +
+                            "WHERE id = ?"
+            );
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getCurrency().name());
+            ps.setString(3, user.getFirstname());
+            ps.setString(4, user.getSurname());
+            ps.setBytes(5, user.getPhoto());
+            ps.setBytes(6, user.getPhotoSmall());
+            ps.setString(7, user.getFullname());
+            ps.setObject(8, user.getId());
+            return ps;
+        });
+        return user;
     }
+
+
+    @Override
+    public void sendInvitation(UserEntity requester, UserEntity addressee) {
+        createFriendshipWithStatus(requester, addressee, FriendshipStatus.PENDING);
+    }
+
 
     @Override
     public void addFriend(UserEntity requester, UserEntity addressee) {
         createFriendshipWithStatus(requester, addressee, FriendshipStatus.ACCEPTED);
         createFriendshipWithStatus(addressee, requester, FriendshipStatus.ACCEPTED);
+    }
+
+    @Override
+    public void remove(UserEntity user) {
+        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
+        template.update("DELETE FROM friendship WHERE requester_id = ? or addressee_id = ?", user.getId(), user.getId());
+        template.update("DELETE FROM \"user\" WHERE id = ?", user.getId());
+
     }
 
     private void createFriendshipWithStatus(UserEntity requester, UserEntity addressee, FriendshipStatus status) {

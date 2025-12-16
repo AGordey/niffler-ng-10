@@ -3,5 +3,12 @@ package guru.qa.niffler.service;
 import guru.qa.niffler.model.UserJson;
 
 public interface UserClient {
-    UserJson create(UserJson userJson);
+
+    UserJson createUser(String username, String password);
+
+    void addIncomeInvitation(UserJson targetUser, int count);
+
+    void addOutcomeInvitation(UserJson targetUser, int count);
+
+    void addFriend(UserJson targetUser, int count);
 }
