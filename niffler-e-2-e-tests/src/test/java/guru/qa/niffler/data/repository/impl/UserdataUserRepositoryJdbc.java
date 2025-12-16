@@ -112,6 +112,11 @@ public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
         }
     }
 
+    @Override
+    public Optional<UserEntity> findByUsername(String username) {
+        return Optional.empty();
+    }
+
     //Входящее предложение о дружбе (другой юзер запрашивает)
     @Override
     public void addIncomeInvitation(UserEntity requester, UserEntity addressee) {
