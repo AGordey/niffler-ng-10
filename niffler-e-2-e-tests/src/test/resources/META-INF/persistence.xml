@@ -5,6 +5,7 @@
     <persistence-unit name="jdbc:postgresql://localhost:5432/niffler-auth" transaction-type="JTA">
         <jta-data-source>java:comp/env/jdbc/niffler-auth</jta-data-source>
         <class>guru.qa.niffler.data.entity.auth.AuthAuthorityEntity</class>
+        <class>guru.qa.niffler.data.entity.auth.AuthorityEntity</class>
         <class>guru.qa.niffler.data.entity.auth.AuthUserEntity</class>
 
         <properties>
