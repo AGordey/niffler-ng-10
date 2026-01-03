@@ -7,9 +7,9 @@ import guru.qa.niffler.data.dao.impl.CategoryDaoSpringJdbc;
 import guru.qa.niffler.data.dao.impl.SpendDaoSpringJdbc;
 import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
-import guru.qa.niffler.data.mapper.SpendEntityResultSetExtractor;
+import guru.qa.niffler.data.extractor.SpendEntityExtractor;
 import guru.qa.niffler.data.repository.SpendRepository;
-import guru.qa.niffler.data.tpl.DataSources;
+import guru.qa.niffler.data.jdbc.DataSources;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Optional;
@@ -71,7 +71,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
         JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
         return Optional.ofNullable(template.query(
                 "SELECT * FROM spend WHERE username = ? AND description = ?",
-                SpendEntityResultSetExtractor.instance,
+                SpendEntityExtractor.instance,
                 username,
                 description)
         );

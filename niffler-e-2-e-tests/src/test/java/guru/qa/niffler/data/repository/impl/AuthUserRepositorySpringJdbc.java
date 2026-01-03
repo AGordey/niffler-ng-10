@@ -3,9 +3,9 @@ package guru.qa.niffler.data.repository.impl;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.entity.auth.AuthAuthorityEntity;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
-import guru.qa.niffler.data.mapper.AuthUserEntityResultSetExtractor;
+import guru.qa.niffler.data.extractor.AuthUserEntityExtractor;
 import guru.qa.niffler.data.repository.AuthUserRepository;
-import guru.qa.niffler.data.tpl.DataSources;
+import guru.qa.niffler.data.jdbc.DataSources;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -112,7 +112,7 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
                         JOIN authority a ON u.id = a.user_id
                         WHERE u.id = ?
                         """,
-                AuthUserEntityResultSetExtractor.instance,
+                AuthUserEntityExtractor.instance,
                 id
         ));
     }
@@ -135,7 +135,7 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
                         JOIN authority a ON u.id = a.user_id
                         WHERE u.username = ?
                         """,
-                AuthUserEntityResultSetExtractor.instance,
+                AuthUserEntityExtractor.instance,
                 username
         ));
     }

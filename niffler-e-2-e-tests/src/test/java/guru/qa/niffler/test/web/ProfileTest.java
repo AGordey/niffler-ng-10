@@ -4,48 +4,43 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.page.LoginPage;
-import guru.qa.niffler.page.MainPage;
-import guru.qa.niffler.page.ProfilePage;
-import org.junit.jupiter.api.BeforeEach;
+import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.page.*;
 import org.junit.jupiter.api.Test;
 
 public class ProfileTest {
     private static final Config CFG = Config.getInstance();
-    private static final String userLogin = "User_1";
-    private static final String userPassword = "12345";
     private final MainPage mainPage = new MainPage();
     private final ProfilePage profilePage = new ProfilePage();
     private LoginPage loginPage;
 
-    @BeforeEach
-    void setUp() {
-        loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
-        loginPage.login(userLogin, userPassword);
-        mainPage.goToProfilePage();
-    }
 
-    @User(username = userLogin,
+    @User(
             categories = @Category(
                     archived = false
             )
     )
     @Test
-    void activeCategoryShouldPresentInCategoryList(CategoryJson category) {
-        profilePage.checkCategoryIsDisplayed(category.name());
+    void activeCategoryShouldPresentInCategoryList(UserJson user) {
+        loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
+        loginPage.login(user.username(), user.testData().password());
+        mainPage.goToProfilePage();
+        profilePage.checkCategoryIsDisplayed(user.testData().categories().getFirst().name());
 
     }
 
-    @User(username = userLogin,
+    @User(
             categories = @Category(
                     archived = true
             )
     )
     @Test
-    void archivedCategoryShouldNotBePresentedInActiveCategoryList(CategoryJson category) {
+    void archivedCategoryShouldNotBePresentedInActiveCategoryList(UserJson user) {
+        loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
+        loginPage.login(user.username(), user.testData().password());
+        mainPage.goToProfilePage();
         profilePage.showActiveAndArchivedCategoriesList();
-        profilePage.checkArchiveCategoryIsDisplayed(category.name());
+        profilePage.checkArchiveCategoryIsDisplayed(user.testData().categories().getFirst().name());
 
     }
 
