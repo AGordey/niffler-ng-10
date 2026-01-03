@@ -64,8 +64,32 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
     }
 
     @Override
+    public AuthUserEntity update(AuthUserEntity user) {
+        try (PreparedStatement ps = holder(URL).connection().prepareStatement(
+                "UPDATE \"user\" u   SET " +
+                        "username = ?, password = ?, enabled = ?, " +
+                        "account_non_expired = ?, account_non_locked = ?, " +
+                        "credentials_non_expired = ? " +
+                        "WHERE u.id = ?")) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setBoolean(3, user.getEnabled());
+            ps.setBoolean(4, user.getAccountNonExpired());
+            ps.setBoolean(5, user.getAccountNonLocked());
+            ps.setBoolean(6, user.getCredentialsNonExpired());
+            ps.setObject(7, user.getId());
+            ps.execute();
+            return user;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Optional<AuthUserEntity> findById(UUID id) {
-        try (PreparedStatement ps = holder(URL).connection().prepareStatement("SELECT * FROM \"user\" u join \"authority\" a on u.id = a.user_id WHERE u.id = ?")) {
+        try (PreparedStatement ps = holder(URL).connection().prepareStatement(
+                "SELECT * FROM \"user\" u join \"authority\" a on u.id = a.user_id " +
+                        "WHERE u.id = ?")) {
             ps.setObject(1, id);
             ps.execute();
 
@@ -97,7 +121,10 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     @Override
     public Optional<AuthUserEntity> findByUsername(String username) {
-        try (PreparedStatement ps = holder(URL).connection().prepareStatement("SELECT * FROM \"user\" u join \"authority\" a on u.id = a.user_id WHERE u.username = ?")) {
+        try (PreparedStatement ps = holder(URL).connection().prepareStatement(
+                "SELECT * FROM \"user\" u join \"authority\" a" +
+                        " on u.id = a.user_id " +
+                        "WHERE u.username = ?")) {
             ps.setString(1, username);
             ps.execute();
 
@@ -125,6 +152,23 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void remove(AuthUserEntity user) {
+        try (PreparedStatement userPs = holder(URL).connection().prepareStatement(
+                "DELETE FROM \"user\" WHERE id = ?");
+             PreparedStatement authorityPs = holder(URL).connection().prepareStatement(
+                     "DELETE FROM \"authority\" WHERE id = ?")
+        ) {
+            userPs.setObject(1, user.getId());
+            userPs.execute();
+            authorityPs.setObject(1, user.getId());
+            authorityPs.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

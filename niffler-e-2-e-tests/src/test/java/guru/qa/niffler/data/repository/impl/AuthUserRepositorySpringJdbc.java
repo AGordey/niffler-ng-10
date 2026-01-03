@@ -3,9 +3,7 @@ package guru.qa.niffler.data.repository.impl;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.entity.auth.AuthAuthorityEntity;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
-import guru.qa.niffler.data.entity.auth.Authority;
 import guru.qa.niffler.data.mapper.AuthUserEntityResultSetExtractor;
-import guru.qa.niffler.data.mapper.AuthUserEntityRowMapper;
 import guru.qa.niffler.data.repository.AuthUserRepository;
 import guru.qa.niffler.data.tpl.DataSources;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -16,25 +14,22 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static guru.qa.niffler.data.tpl.Connections.holder;
 
 public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
 
     private static final Config CFG = Config.getInstance();
+    private static final String URL = CFG.authUrl();
+    ;
     private static final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
 
     @Override
     public AuthUserEntity create(AuthUserEntity authUserEntity) {
-        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
+        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(
@@ -76,8 +71,32 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
     }
 
     @Override
+    public AuthUserEntity update(AuthUserEntity user) {
+        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
+        template.update(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE \"user\" u   SET " +
+                            "username = ?, password = ?, enabled = ?, " +
+                            "account_non_expired = ?, account_non_locked = ?, " +
+                            "credentials_non_expired = ? " +
+                            "WHERE u.id = ?"
+            );
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setBoolean(3, user.getEnabled());
+            statement.setBoolean(4, user.getAccountNonExpired());
+            statement.setBoolean(5, user.getAccountNonLocked());
+            statement.setBoolean(6, user.getCredentialsNonExpired());
+            statement.setObject(7, user.getId());
+            statement.execute();
+            return statement;
+        });
+        return user;
+    }
+
+    @Override
     public Optional<AuthUserEntity> findById(UUID id) {
-        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
+        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
         return Optional.ofNullable(template.query(
                 """
                         SELECT user_id as id,
@@ -97,9 +116,10 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
                 id
         ));
     }
+
     @Override
     public Optional<AuthUserEntity> findByUsername(String username) {
-        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
+        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
         return Optional.ofNullable(template.query(
                 """
                         SELECT user_id as id,
@@ -120,5 +140,13 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
         ));
     }
 
+
+    @Override
+    public void remove(AuthUserEntity user) {
+        JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
+        template.update("DELETE FROM authority WHERE user_id = ?", user.getId());
+        template.update("DELETE FROM \"user\" WHERE id = ?", user.getId());
+
+    }
 
 }

@@ -33,6 +33,7 @@ public class DataSources {
           dsBean.setXaProperties(props);
           dsBean.setPoolSize(3);  // ставим 3 потому что запускаем тесты в 3 потока
           dsBean.setMaxPoolSize(10);
+          //Регистрируем Датасорс в JNDI
             try {
                 InitialContext context = new InitialContext();
                 context.bind("java:comp/env/jdbc/" + uniqId, dsBean);

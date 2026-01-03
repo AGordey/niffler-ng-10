@@ -24,14 +24,14 @@ public class JdbcTest {
                         new Date(),
                         new CategoryJson(
                                 null,
-                                "cat-name-tx-2",
-                                "duck",
+                                "Кошкин дом",
+                                "sanek-1",
                                 false
                         ),
                         CurrencyValues.RUB,
                         1000.0,
-                        "spend-name-tx",
-                        "duck"
+                        "Кошкин дом ноябрь",
+                        "sanek-1"
                 )
         );
 
@@ -41,7 +41,7 @@ public class JdbcTest {
     static UserDbClient usersDbClient = new UserDbClient();
 
     @ValueSource(strings = {
-            "sanek-1"
+            "sanek-4"
     })
     @ParameterizedTest
     void springJdbcTest(String uname) {
@@ -52,5 +52,6 @@ public class JdbcTest {
 
         usersDbClient.addIncomeInvitation(user, 1);
         usersDbClient.addOutcomeInvitation(user, 1);
+        usersDbClient.addFriend(user, 3);
     }
 }
