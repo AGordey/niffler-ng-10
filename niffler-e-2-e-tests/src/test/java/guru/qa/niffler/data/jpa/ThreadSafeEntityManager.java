@@ -1,23 +1,7 @@
 package guru.qa.niffler.data.jpa;
 
-<<<<<<< HEAD
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.*;
-=======
-import jakarta.persistence.EntityGraph;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.FlushModeType;
-import jakarta.persistence.LockModeType;
-import jakarta.persistence.Query;
-import jakarta.persistence.StoredProcedureQuery;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaDelete;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.CriteriaUpdate;
->>>>>>> d6f9937 (Video_6.2 with some problem)
 import jakarta.persistence.metamodel.Metamodel;
 
 import javax.annotation.Nonnull;
@@ -86,7 +70,6 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
-<<<<<<< HEAD
   public <T> T find(Class<T> aClass, Object o, FindOption... findOptions) {
     return null;
   }
@@ -97,21 +80,16 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
-=======
->>>>>>> d6f9937 (Video_6.2 with some problem)
   public <T> T getReference(Class<T> entityClass, Object primaryKey) {
     return threadEm().getReference(entityClass, primaryKey);
   }
 
   @Override
-<<<<<<< HEAD
   public <T> T getReference(T t) {
     return null;
   }
 
   @Override
-=======
->>>>>>> d6f9937 (Video_6.2 with some problem)
   public void flush() {
     threadEm().flush();
   }
@@ -137,14 +115,11 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
-<<<<<<< HEAD
   public void lock(Object o, LockModeType lockModeType, LockOption... lockOptions) {
 
   }
 
   @Override
-=======
->>>>>>> d6f9937 (Video_6.2 with some problem)
   public void refresh(Object entity) {
     threadEm().refresh(entity);
   }
@@ -165,14 +140,11 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
-<<<<<<< HEAD
   public void refresh(Object o, RefreshOption... refreshOptions) {
 
   }
 
   @Override
-=======
->>>>>>> d6f9937 (Video_6.2 with some problem)
   public void clear() {
     threadEm().clear();
   }
@@ -193,7 +165,6 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
-<<<<<<< HEAD
   public void setCacheRetrieveMode(CacheRetrieveMode cacheRetrieveMode) {
 
   }
@@ -214,8 +185,6 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
-=======
->>>>>>> d6f9937 (Video_6.2 with some problem)
   public void setProperty(String propertyName, Object value) {
     threadEm().setProperty(propertyName, value);
   }
@@ -236,14 +205,11 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
-<<<<<<< HEAD
   public <T> TypedQuery<T> createQuery(CriteriaSelect<T> criteriaSelect) {
     return null;
   }
 
   @Override
-=======
->>>>>>> d6f9937 (Video_6.2 with some problem)
   public Query createQuery(CriteriaUpdate updateQuery) {
     return threadEm().createQuery(updateQuery);
   }
@@ -269,14 +235,11 @@ public class ThreadSafeEntityManager implements EntityManager {
   }
 
   @Override
-<<<<<<< HEAD
   public <T> TypedQuery<T> createQuery(TypedQueryReference<T> typedQueryReference) {
     return null;
   }
 
   @Override
-=======
->>>>>>> d6f9937 (Video_6.2 with some problem)
   public Query createNativeQuery(String sqlString) {
     return threadEm().createNativeQuery(sqlString);
   }
@@ -375,7 +338,6 @@ public class ThreadSafeEntityManager implements EntityManager {
   public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> entityClass) {
     return threadEm().getEntityGraphs(entityClass);
   }
-<<<<<<< HEAD
 
   @Override
   public <C> void runWithConnection(ConnectionConsumer<C> connectionConsumer) {
@@ -386,6 +348,4 @@ public class ThreadSafeEntityManager implements EntityManager {
   public <C, T> T callWithConnection(ConnectionFunction<C, T> connectionFunction) {
     return null;
   }
-=======
->>>>>>> d6f9937 (Video_6.2 with some problem)
 }
