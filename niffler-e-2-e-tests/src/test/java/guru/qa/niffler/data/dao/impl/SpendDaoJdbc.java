@@ -51,6 +51,34 @@ public class SpendDaoJdbc implements SpendDao {
     }
 
     @Override
+    public SpendEntity update(SpendEntity spend) {
+        try (PreparedStatement statement = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
+                """
+                        UPDATE spend
+                        SET username = ?,
+                            spend_date = ?,
+                            currency = ?,
+                            amount = ?,
+                            description = ?,
+                            category_id = ?
+                        WHERE id = ?
+                        """)
+        ) {
+            statement.setString(1, spend.getUsername());
+            statement.setDate(2, new Date(spend.getSpendDate().getTime()));
+            statement.setString(3, spend.getCurrency().name());
+            statement.setDouble(4, spend.getAmount());
+            statement.setString(5, spend.getDescription());
+            statement.setObject(6, spend.getCategory().getId());
+            statement.setObject(7, spend.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return spend;
+    }
+
+    @Override
     public Optional<SpendEntity> findById(UUID id) {
         try (PreparedStatement ps = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"spend\" WHERE id = ?"

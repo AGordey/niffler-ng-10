@@ -156,10 +156,10 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     @Override
     public void remove(AuthUserEntity user) {
-        try (PreparedStatement userPs = holder(URL).connection().prepareStatement(
-                "DELETE FROM \"user\" WHERE id = ?");
-             PreparedStatement authorityPs = holder(URL).connection().prepareStatement(
-                     "DELETE FROM \"authority\" WHERE id = ?")
+        try (PreparedStatement authorityPs = holder(URL).connection().prepareStatement(
+                "DELETE FROM \"authority\" WHERE user_id = ?");
+             PreparedStatement userPs = holder(URL).connection().prepareStatement(
+                     "DELETE FROM \"user\" WHERE id = ?")
         ) {
             userPs.setObject(1, user.getId());
             userPs.execute();
