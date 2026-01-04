@@ -15,7 +15,7 @@ import static guru.qa.niffler.data.jpa.EntityManagers.em;
 public class SpendRepositoryHibernate implements SpendRepository {
     private static final Config CFG = Config.getInstance();
 
-    private final EntityManager entityManager = em(CFG.spendUrl());
+    private final EntityManager entityManager = em(CFG.spendJdbcUrl());
 
     @Override
     public SpendEntity create(SpendEntity spend) {

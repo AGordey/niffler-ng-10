@@ -3,9 +3,9 @@ package guru.qa.niffler.data.repository.impl;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.entity.userdata.FriendshipStatus;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
-import guru.qa.niffler.data.mapper.UserdataUserEntityResultSetExtractor;
+import guru.qa.niffler.data.extractor.UserdataUserEntityExtractor;
 import guru.qa.niffler.data.repository.UserdataUserRepository;
-import guru.qa.niffler.data.tpl.DataSources;
+import guru.qa.niffler.data.jdbc.DataSources;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -52,7 +52,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
                         "LEFT JOIN friendship f " +
                         "ON u.id = f.requester_id OR u.id = f.addressee_id " +
                         "WHERE id = ?",
-                UserdataUserEntityResultSetExtractor.instance,
+                UserdataUserEntityExtractor.instance,
                 id
         ));
     }
@@ -65,7 +65,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
                         "LEFT JOIN friendship f " +
                         "ON u.id = f.requester_id OR u.id = f.addressee_id " +
                         "WHERE username = ?",
-                UserdataUserEntityResultSetExtractor.instance,
+                UserdataUserEntityExtractor.instance,
                 username
         ));
     }
@@ -96,7 +96,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
 
 
     @Override
-    public void sendInvitation(UserEntity requester, UserEntity addressee) {
+    public void addFriendshipRequest(UserEntity requester, UserEntity addressee) {
         createFriendshipWithStatus(requester, addressee, FriendshipStatus.PENDING);
     }
 

@@ -1,4 +1,4 @@
-package guru.qa.niffler.data.tpl;
+package guru.qa.niffler.data.jdbc;
 
 import java.util.List;
 //Этот класс делали что бы можно было работать с несколькими холдерами

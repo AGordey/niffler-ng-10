@@ -41,7 +41,7 @@ public class JdbcTest {
     static UserDbClient usersDbClient = new UserDbClient();
 
     @ValueSource(strings = {
-            "sanek-4"
+            "sanek-6"
     })
     @ParameterizedTest
     void springJdbcTest(String uname) {
