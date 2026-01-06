@@ -25,8 +25,8 @@ public class SpendingTest {
     @Test
     void spendingDescriptionShouldBeEditedByTableAction(UserJson user) {
         final String newDescription = "Обучение Niffler Next Generation";
-        final String spendingDescription = user.testData().spendings().get(0).description();
-        System.out.println("Login " + user.username());
+        final String spendingDescription = user.testData().spendings().getFirst().description();
+
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .searchSpending(spendingDescription)
