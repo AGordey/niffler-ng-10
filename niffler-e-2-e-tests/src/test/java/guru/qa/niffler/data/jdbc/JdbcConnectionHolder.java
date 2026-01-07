@@ -1,12 +1,15 @@
 package guru.qa.niffler.data.jdbc;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+
 //Хранит в себе информацию о соединениях конекшенах
+@ParametersAreNonnullByDefault
 public class JdbcConnectionHolder implements AutoCloseable {
 
     // Объект, где храним привязка к нашему URLу т.е. к каждой БД может быть один объект и хранить коннекшен к каждому потоку

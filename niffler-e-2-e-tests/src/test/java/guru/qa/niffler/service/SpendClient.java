@@ -1,18 +1,20 @@
 package guru.qa.niffler.service;
 
 import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 
-import java.util.List;
-import java.util.Optional;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public interface SpendClient {
+    @Nonnull
+    SpendJson createSpend(SpendJson spend);
 
-  SpendJson createSpend(SpendJson spend);
+    @Nonnull
+    CategoryJson createCategory(CategoryJson category);
 
-  CategoryJson createCategory(CategoryJson category);
-
-  CategoryJson updateCategory(CategoryJson category);
+    @Nonnull
+    CategoryJson updateCategory(CategoryJson category);
 
 }

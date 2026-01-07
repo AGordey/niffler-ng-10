@@ -1,35 +1,41 @@
 package guru.qa.niffler.data.jdbc;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@ParametersAreNonnullByDefault
 public class Connections {
-  private Connections() {
-  }
-//Применяем ConcurrentHashMap для работы из разных потоков
-  // String - наш ключ = JDBC URL
-  private static final Map<String, JdbcConnectionHolder> holders = new ConcurrentHashMap<>();
+    //Применяем ConcurrentHashMap для работы из разных потоков
+    // String - наш ключ = JDBC URL
+    private static final Map<String, JdbcConnectionHolder> holders = new ConcurrentHashMap<>();
 
-  public static JdbcConnectionHolder holder(String jdbcUrl) {
-    return holders.computeIfAbsent(
-        jdbcUrl,
-        key -> new JdbcConnectionHolder(
-            DataSources.dataSource(jdbcUrl)
-        )
-    );
-  }
-
-  public static JdbcConnectionHolders holders(String... jdbcUrl) {
-    List<JdbcConnectionHolder> result = new ArrayList<>();
-    for (String url : jdbcUrl) {
-      result.add(holder(url));
+    private Connections() {
     }
-    return new JdbcConnectionHolders(result);
-  }
 
-  public static void closeAllConnections() {
-    holders.values().forEach(JdbcConnectionHolder::closeAllConnections);
-  }
+    @Nonnull
+    public static JdbcConnectionHolder holder(String jdbcUrl) {
+        return holders.computeIfAbsent(
+                jdbcUrl,
+                key -> new JdbcConnectionHolder(
+                        DataSources.dataSource(jdbcUrl)
+                )
+        );
+    }
+
+    @Nonnull
+    public static JdbcConnectionHolders holders(String... jdbcUrl) {
+        List<JdbcConnectionHolder> result = new ArrayList<>();
+        for (String url : jdbcUrl) {
+            result.add(holder(url));
+        }
+        return new JdbcConnectionHolders(result);
+    }
+
+    public static void closeAllConnections() {
+        holders.values().forEach(JdbcConnectionHolder::closeAllConnections);
+    }
 }
