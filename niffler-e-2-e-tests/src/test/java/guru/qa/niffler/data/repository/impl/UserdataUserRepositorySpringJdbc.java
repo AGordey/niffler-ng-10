@@ -10,16 +10,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository {
 
     private static final Config CFG = Config.getInstance();
 
-    @Override
+  @Nonnull
+  @Override
     public UserEntity create(UserEntity user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         KeyHolder kh = new GeneratedKeyHolder();
@@ -44,7 +48,8 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
         return user;
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<UserEntity> findById(UUID id) {
         JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         return Optional.ofNullable(template.query(
@@ -57,7 +62,8 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
         ));
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<UserEntity> findByUsername(String username) {
         JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         return Optional.ofNullable(template.query(
@@ -70,7 +76,8 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
         ));
     }
 
-    @Override
+  @Nonnull
+  @Override
     public UserEntity update(UserEntity user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         jdbcTemplate.update(con -> {
@@ -94,20 +101,19 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
         return user;
     }
 
-
-    @Override
+  @Override
     public void addFriendshipRequest(UserEntity requester, UserEntity addressee) {
         createFriendshipWithStatus(requester, addressee, FriendshipStatus.PENDING);
     }
 
 
-    @Override
+  @Override
     public void addFriend(UserEntity requester, UserEntity addressee) {
         createFriendshipWithStatus(requester, addressee, FriendshipStatus.ACCEPTED);
         createFriendshipWithStatus(addressee, requester, FriendshipStatus.ACCEPTED);
     }
 
-    @Override
+  @Override
     public void remove(UserEntity user) {
         JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         template.update("DELETE FROM friendship WHERE requester_id = ? or addressee_id = ?", user.getId(), user.getId());

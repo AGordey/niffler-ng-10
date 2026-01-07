@@ -10,6 +10,8 @@ import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.data.repository.SpendRepository;
 import guru.qa.niffler.model.CurrencyValues;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +21,7 @@ import java.util.UUID;
 
 import static guru.qa.niffler.data.jdbc.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class SpendRepositoryJdbc implements SpendRepository {
 
     private static final Config CFG = Config.getInstance();
@@ -26,7 +29,8 @@ public class SpendRepositoryJdbc implements SpendRepository {
     private static final SpendDao spendDao = new SpendDaoJdbc();
     private static final CategoryDao categoryDao = new CategoryDaoJdbc();
 
-    @Override
+  @Nonnull
+  @Override
     public SpendEntity create(SpendEntity spend) {
         if (spend.getCategory().getId() == null || categoryDao.findById(spend.getCategory().getId()).isEmpty()) {
             spend.setCategory(
@@ -36,7 +40,8 @@ public class SpendRepositoryJdbc implements SpendRepository {
         return spendDao.create(spend);
     }
 
-    @Override
+  @Nonnull
+  @Override
     public SpendEntity update(SpendEntity spend) {
         try (PreparedStatement spendPs = holder(URL).connection().prepareStatement(
                 "UPDATE \"spend\" SET " +
@@ -70,32 +75,38 @@ public class SpendRepositoryJdbc implements SpendRepository {
     }
 
 
-    @Override
+  @Nonnull
+  @Override
     public CategoryEntity updateCategory(CategoryEntity category) {
         return categoryDao.update(category);
     }
 
-    @Override
+  @Nonnull
+  @Override
     public CategoryEntity createCategory(CategoryEntity category) {
         return categoryDao.create(category);
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<CategoryEntity> findCategoryById(UUID id) {
         return categoryDao.findById(id);
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<CategoryEntity> findCategoryByUsernameAndName(String username, String name) {
         return categoryDao.findByUsernameAndCategoryName(username, name);
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<SpendEntity> findById(UUID id) {
         return spendDao.findById(id);
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<SpendEntity> findByUsernameAndSpendDescription(String username, String description) {
         try (PreparedStatement ps = holder(URL).connection().prepareStatement(
                 "SELECT * FROM \"spend\" WHERE username = ? and description = ?"
@@ -125,13 +136,13 @@ public class SpendRepositoryJdbc implements SpendRepository {
         }
     }
 
-    @Override
+  @Override
     public void remove(SpendEntity spend) {
         spendDao.delete(spend);
 
     }
 
-    @Override
+  @Override
     public void removeCategory(CategoryEntity spend) {
         categoryDao.delete(spend);
     }

@@ -4,8 +4,8 @@ import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.entity.auth.AuthAuthorityEntity;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.extractor.AuthUserEntityExtractor;
-import guru.qa.niffler.data.repository.AuthUserRepository;
 import guru.qa.niffler.data.jdbc.DataSources;
+import guru.qa.niffler.data.repository.AuthUserRepository;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,20 +13,23 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
 
     private static final Config CFG = Config.getInstance();
     private static final String URL = CFG.authUrl();
-    ;
     private static final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
 
+    @Nonnull
     @Override
     public AuthUserEntity create(AuthUserEntity authUserEntity) {
         JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
@@ -70,6 +73,7 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
         return authUserEntity;
     }
 
+    @Nonnull
     @Override
     public AuthUserEntity update(AuthUserEntity user) {
         JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
@@ -94,6 +98,7 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
         return user;
     }
 
+    @Nonnull
     @Override
     public Optional<AuthUserEntity> findById(UUID id) {
         JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
@@ -117,6 +122,7 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
         ));
     }
 
+    @Nonnull
     @Override
     public Optional<AuthUserEntity> findByUsername(String username) {
         JdbcTemplate template = new JdbcTemplate(DataSources.dataSource(URL));
@@ -139,7 +145,6 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
                 username
         ));
     }
-
 
     @Override
     public void remove(AuthUserEntity user) {

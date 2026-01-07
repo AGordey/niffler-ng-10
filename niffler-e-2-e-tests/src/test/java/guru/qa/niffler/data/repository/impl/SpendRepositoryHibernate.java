@@ -7,52 +7,61 @@ import guru.qa.niffler.data.repository.SpendRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
 import static guru.qa.niffler.data.jpa.EntityManagers.em;
 
+@ParametersAreNonnullByDefault
 public class SpendRepositoryHibernate implements SpendRepository {
     private static final Config CFG = Config.getInstance();
 
     private final EntityManager entityManager = em(CFG.spendJdbcUrl());
 
-    @Override
+  @Nonnull
+  @Override
     public SpendEntity create(SpendEntity spend) {
         entityManager.joinTransaction();
         entityManager.persist(spend);
         return spend;
     }
 
-    @Override
+  @Nonnull
+  @Override
     public SpendEntity update(SpendEntity spend) {
         entityManager.joinTransaction();
         entityManager.merge(spend);
         return spend;
     }
 
-    @Override
+  @Nonnull
+  @Override
     public CategoryEntity updateCategory(CategoryEntity category) {
         entityManager.joinTransaction();
         entityManager.merge(category);
         return category;
     }
 
-    @Override
+  @Nonnull
+  @Override
     public CategoryEntity createCategory(CategoryEntity category) {
         entityManager.joinTransaction();
         entityManager.persist(category);
         return category;
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<CategoryEntity> findCategoryById(UUID id) {
         return Optional.ofNullable(
                 entityManager.find(CategoryEntity.class, id)
         );
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<CategoryEntity> findCategoryByUsernameAndName(String username, String name) {
         try {
             return Optional.ofNullable(
@@ -72,7 +81,8 @@ public class SpendRepositoryHibernate implements SpendRepository {
         }
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<SpendEntity> findById(UUID id) {
         try {
             return Optional.of(
@@ -83,7 +93,8 @@ public class SpendRepositoryHibernate implements SpendRepository {
         }
     }
 
-    @Override
+  @Nonnull
+  @Override
     public Optional<SpendEntity> findByUsernameAndSpendDescription(String username, String description) {
         try {
             return Optional.of(
@@ -103,18 +114,20 @@ public class SpendRepositoryHibernate implements SpendRepository {
         }
     }
 
-    @Override
+  @Override
     public void remove(SpendEntity spend) {
         entityManager.joinTransaction();
+      //https://youtu.be/ITNP5577se8?t=2552  Почему мы делаем проверку
         if (!entityManager.contains(spend)) {
             entityManager.merge(spend);
         }
         entityManager.remove(spend);
     }
 
-    @Override
+  @Override
     public void removeCategory(CategoryEntity spend) {
         entityManager.joinTransaction();
+      //https://youtu.be/ITNP5577se8?t=2552  Почему мы делаем проверку
         if (!entityManager.contains(spend)) {
             entityManager.merge(spend);
         }

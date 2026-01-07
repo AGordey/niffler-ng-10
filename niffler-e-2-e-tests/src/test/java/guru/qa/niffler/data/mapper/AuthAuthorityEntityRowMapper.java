@@ -5,10 +5,13 @@ import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.auth.Authority;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class AuthAuthorityEntityRowMapper implements RowMapper<AuthAuthorityEntity> {
 
     public static final AuthAuthorityEntityRowMapper instance = new AuthAuthorityEntityRowMapper();
@@ -17,6 +20,7 @@ public class AuthAuthorityEntityRowMapper implements RowMapper<AuthAuthorityEnti
     }
 
     @Override
+    @Nonnull
     public AuthAuthorityEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         AuthAuthorityEntity authAuthority = new AuthAuthorityEntity();
         authAuthority.setId(rs.getObject("id", UUID.class));
