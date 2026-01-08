@@ -117,6 +117,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
   @Override
     public void remove(SpendEntity spend) {
         entityManager.joinTransaction();
+      //https://youtu.be/ITNP5577se8?t=2552  Почему мы делаем проверку
         if (!entityManager.contains(spend)) {
             entityManager.merge(spend);
         }
@@ -126,6 +127,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
   @Override
     public void removeCategory(CategoryEntity spend) {
         entityManager.joinTransaction();
+      //https://youtu.be/ITNP5577se8?t=2552  Почему мы делаем проверку
         if (!entityManager.contains(spend)) {
             entityManager.merge(spend);
         }
