@@ -60,7 +60,7 @@ public class RegisterPage {
 
     @Nonnull
     @Step("Переходим на страницу входа, нажав кнопку 'Войти'")
-    public RegisterPage sighInButtonToLoginPage() {
+    public LoginPage sighInButtonToLoginPage() {
         signInButton.click();
         return new LoginPage();
     }
