@@ -7,11 +7,13 @@ import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.page.AllPeoplePage;
 import guru.qa.niffler.page.FriendsPage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
-import guru.qa.niffler.page.AllPeoplePage;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(BrowserExtension.class)
@@ -26,6 +28,7 @@ public class FriendsTest {
 
     @BeforeEach
     void setUp() {
+        Configuration.holdBrowserOpen = true;
         loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
     }
 
@@ -66,5 +69,33 @@ public class FriendsTest {
         mainPage.goToAllPeoplePage();
         allPeoplePage.searchFriends(user.testData().incomeInvitations().getFirst().username());
         allPeoplePage.checkWaitingOfUserInvitations(user.testData().incomeInvitations().getFirst().username());
+    }
+
+    @Test
+    @User(outcomeInvitations = 1)
+    @DisplayName("Прием заявки в друзья")
+    void acceptInvitationOfFriendship(UserJson user) {
+        String nameOfUserWhoMadeIncomeInvitation = user.testData().outcomeInvitations().getFirst().username();
+        System.out.println(nameOfUserWhoMadeIncomeInvitation);
+        loginPage.login(user.username(), user.testData().password());
+        mainPage.goToFriendsPage()
+                .checkExistingInvitations(nameOfUserWhoMadeIncomeInvitation)
+                .acceptFriendship(nameOfUserWhoMadeIncomeInvitation)
+                .searchFriends(nameOfUserWhoMadeIncomeInvitation)
+                .checkExistingFriends(nameOfUserWhoMadeIncomeInvitation);
+    }
+
+    @Test
+    @User(outcomeInvitations = 1)
+    @DisplayName("Отклонение заявки в друзья")
+    void declineInvitationOfFriendship(UserJson user) {
+        String nameOfUserWhoMadeIncomeInvitation = user.testData().outcomeInvitations().getFirst().username();
+        System.out.println(nameOfUserWhoMadeIncomeInvitation);
+        loginPage.login(user.username(), user.testData().password());
+        mainPage.goToFriendsPage()
+                .checkExistingInvitations(nameOfUserWhoMadeIncomeInvitation)
+                .declineFriendship(nameOfUserWhoMadeIncomeInvitation)
+                .searchFriends(nameOfUserWhoMadeIncomeInvitation)
+                .checkNoExistingFriends();
     }
 }
