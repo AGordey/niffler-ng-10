@@ -5,6 +5,7 @@ import guru.qa.niffler.api.UserApi;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.util.RandomDataUtils;
+import io.qameta.allure.Step;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -32,6 +33,7 @@ public class UserApiClient implements UserClient {
 
     @Nonnull
     @Override
+    @Step("Создаём пользователя с логином '{username}'")
     public UserJson createUser(String username, String password) {
         Response<UserJson> response;
         try {
@@ -47,6 +49,7 @@ public class UserApiClient implements UserClient {
 
     @Nonnull
     @Override
+    @Step("Отправляем {count} входящих запросов в друзья пользователю '{targetUser.username}'")
     public List<UserJson> addIncomeInvitation(UserJson targetUser, int count) {
         List<UserJson> result = new ArrayList<>();
         try {
@@ -66,6 +69,7 @@ public class UserApiClient implements UserClient {
 
     @Nonnull
     @Override
+    @Step("Отправляем {count} исходящих запросов в друзья от пользователя '{targetUser.username}'")
     public List<UserJson> addOutcomeInvitation(UserJson targetUser, int count) {
         List<UserJson> result = new ArrayList<>();
         try {
@@ -85,6 +89,7 @@ public class UserApiClient implements UserClient {
 
     @Nonnull
     @Override
+    @Step("Добавляем {count} друзей пользователю '{targetUser.username}'")
     public List<UserJson> addFriend(UserJson targetUser, int count) {
         List<UserJson> result = new ArrayList<>();
         try {
