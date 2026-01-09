@@ -2,6 +2,7 @@ package guru.qa.niffler.page.component;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDate;
@@ -32,8 +33,9 @@ public class Calendar {
     private final ElementsCollection dayCalendarList = dateCalendar.find(".MuiDayCalendar-monthContainer")
             .findAll("button");
 
+    @Step("Выбираем дату в компоненте календарь '{date}'")
     public Calendar selectDateInCalendar(Date date) {
-        if (checkDateFromFuture(date)){
+        if (checkDateFromFuture(date)) {
             LocalDate inputDate = date.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
@@ -62,18 +64,18 @@ public class Calendar {
     }
 
     private void selectMonthFromDate(LocalDate date) throws IllegalArgumentException {
-            int month = date.getMonthValue();
-            int currentMonth = YearMonth.parse(currentYearMonth.text(), formatter).getMonthValue();
-            while (currentMonth != month) {
-                if (currentMonth < month) {
-                    nextMonthButton.click();
-                    currentMonth++;
-                } else {
-                    previousMonthButton.click();
-                    currentMonth--;
-                }
+        int month = date.getMonthValue();
+        int currentMonth = YearMonth.parse(currentYearMonth.text(), formatter).getMonthValue();
+        while (currentMonth != month) {
+            if (currentMonth < month) {
+                nextMonthButton.click();
+                currentMonth++;
+            } else {
+                previousMonthButton.click();
+                currentMonth--;
             }
         }
+    }
 
 
     private void selectYearFromDate(LocalDate date) throws IllegalArgumentException {

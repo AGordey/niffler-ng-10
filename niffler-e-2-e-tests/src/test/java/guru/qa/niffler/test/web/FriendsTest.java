@@ -28,7 +28,7 @@ public class FriendsTest {
 
     @BeforeEach
     void setUp() {
-        Configuration.holdBrowserOpen = true;
+//        Configuration.holdBrowserOpen = true;
         loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
     }
 
