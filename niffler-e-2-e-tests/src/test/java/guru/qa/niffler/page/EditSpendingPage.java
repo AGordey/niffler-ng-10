@@ -18,7 +18,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
-public class EditSpendingPage {
+public class EditSpendingPage extends BasePage<EditSpendingPage> {
     private final SelenideElement descriptionInput = $("#description");
     private final SelenideElement saveOrAddBtn = $("#save");
     private final SelenideElement amountInput = $("#amount");

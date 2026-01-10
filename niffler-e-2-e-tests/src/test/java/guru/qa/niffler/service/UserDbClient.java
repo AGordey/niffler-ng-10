@@ -29,13 +29,13 @@ import java.util.Objects;
 import static guru.qa.niffler.util.RandomDataUtils.randomUsername;
 
 @ParametersAreNonnullByDefault
-public class UserDbClient implements UserClient {
+public final class UserDbClient implements UserClient {
 
     private static final Config CFG = Config.getInstance();
     private static final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-    private final AuthUserRepository authUserRepository = new AuthUserRepositoryHibernate();
-    private final UserdataUserRepository userdataUserRepository = new UserdataUserRepositoryHibernate();
+    private final AuthUserRepository authUserRepository = AuthUserRepository.getInstance();
+    private final UserdataUserRepository userdataUserRepository = UserdataUserRepository.getInstance();
 
     private final TransactionTemplate txTemplate = new TransactionTemplate(
             new JdbcTransactionManager(

@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
-public class FriendsPage {
+public class FriendsPage extends BasePage<FriendsPage> {
     private final SelenideElement tableWithAllFriends = $("#simple-tabpanel-friends");
     private final SelenideElement alertWindow = $("[aria-describedby='alert-dialog-slide-description']");
 

@@ -62,4 +62,20 @@ public class ProfileTest {
         profilePage.checkNewName(name);
     }
 
+
+    @User()
+    @Test
+    void nameShouldBeEditedInProfile(UserJson user) {
+        final String testUsername = RandomDataUtils.randomName();
+
+        Selenide.open(CFG.frontUrl(), LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .checkThatPageLoaded();
+
+        Selenide.open(CFG.frontUrl() + "profile", ProfilePage.class)
+                .setNewName(testUsername)
+                .pressSaveChangesBtn()
+                .checkSnackbarText("Profile successfully updated");
+    }
+
 }

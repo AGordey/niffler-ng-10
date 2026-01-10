@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
-public class MainPage {
+public class MainPage extends BasePage<MainPage> {
     private final SelenideElement spendingTable = $("#spendings");
     private final SelenideElement menuOfUser = $("[data-testid='PersonIcon']");
     private final SelenideElement profileOfUser = $(withText("Profile"));

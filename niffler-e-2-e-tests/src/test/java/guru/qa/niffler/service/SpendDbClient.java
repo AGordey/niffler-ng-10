@@ -15,12 +15,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
-public class SpendDbClient implements SpendClient {
+public final class SpendDbClient implements SpendClient {
 
     private static final Config CFG = Config.getInstance();
 
 
-    private final SpendRepository spendRepository = new SpendRepositoryHibernate();
+    private final SpendRepository spendRepository = SpendRepository.getInstance();
 
     private final XaTransactionTemplate xaTransactionTemplate = new XaTransactionTemplate(
             CFG.spendJdbcUrl()
