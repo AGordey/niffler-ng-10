@@ -14,6 +14,9 @@ import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
 public class MainPage extends BasePage<MainPage> {
+
+    private static final String URL = CFG.frontUrl() + "main";
+
     private final SelenideElement spendingTable = $("#spendings");
     private final SelenideElement menuOfUser = $("[data-testid='PersonIcon']");
     private final SelenideElement profileOfUser = $(withText("Profile"));
@@ -44,7 +47,7 @@ public class MainPage extends BasePage<MainPage> {
         return this;
     }
 
-    @Step("Выполняем поиск траты по описанию: '{spendingDescription}'")
+    @Step("Выполняем поиск затраты по описанию: '{spendingDescription}'")
     @Nonnull
     public MainPage searchSpending(String spendingDescription) {
         searchField.setValue(spendingDescription).pressEnter();

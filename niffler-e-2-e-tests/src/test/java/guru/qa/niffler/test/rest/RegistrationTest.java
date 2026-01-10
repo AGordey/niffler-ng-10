@@ -1,12 +1,15 @@
 package guru.qa.niffler.test.rest;
 
 import guru.qa.niffler.service.AuthApiClient;
+import guru.qa.niffler.util.RandomDataUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
+
+import static guru.qa.niffler.util.RandomDataUtils.randomUsername;
 
 public class RegistrationTest {
 
@@ -15,7 +18,7 @@ public class RegistrationTest {
   @Test
   @Disabled
   void newUserShouldRegisteredByApiCall() throws IOException {
-    final Response<Void> response = authApiClient.register("bazz", "12345");
+    final Response<Void> response = authApiClient.register(randomUsername(), "12345");
     Assertions.assertEquals(201, response.code());
   }
 }

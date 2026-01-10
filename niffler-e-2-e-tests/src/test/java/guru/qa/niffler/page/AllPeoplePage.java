@@ -11,6 +11,9 @@ import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
 public class AllPeoplePage extends BasePage<AllPeoplePage> {
+
+    private static final String URL = CFG.frontUrl() + "people/all";
+
     private final SelenideElement tableWithAllPeople = $("#all");
     private final SelenideElement searchField = $("input[aria-label='search']");
 

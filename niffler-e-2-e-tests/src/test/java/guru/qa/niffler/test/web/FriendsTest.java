@@ -2,16 +2,12 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.page.AllPeoplePage;
-import guru.qa.niffler.page.FriendsPage;
 import guru.qa.niffler.page.LoginPage;
-import guru.qa.niffler.page.MainPage;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,55 +16,47 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @WebTest
 public class FriendsTest {
 
-    private static final Config CFG = Config.getInstance();
-    LoginPage loginPage = new LoginPage();
-    MainPage mainPage = new MainPage();
-    FriendsPage friendsPage = new FriendsPage();
-    AllPeoplePage allPeoplePage = new AllPeoplePage();
-
-    @BeforeEach
-    void setUp() {
-//        Configuration.holdBrowserOpen = true;
-        loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
-    }
-
     @Test
     @User(friends = 1)
     @DisplayName("Должен отображаться список друзей")
     void friendShouldBePresentInFriendsTable(UserJson user) {
-        loginPage.login(user.username(), user.testData().password());
-        mainPage.goToFriendsPage();
-        friendsPage.searchFriends(user.testData().friends().getFirst().username());
-        friendsPage.checkExistingFriends(user.testData().friends().getFirst().username());
+        Selenide.open(LoginPage.URL, LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .goToFriendsPage()
+                .searchFriends(user.testData().friends().getFirst().username())
+                .checkExistingFriends(user.testData().friends().getFirst().username());
     }
 
     @Test
     @User()
     @DisplayName("Таблица друзей должна быть пустой")
     void friendsTableShouldBeEmptyForNewUser(UserJson user) {
-        loginPage.login(user.username(), user.testData().password());
-        mainPage.goToFriendsPage();
-        friendsPage.checkNoExistingFriends();
+        Selenide.open(LoginPage.URL, LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .goToFriendsPage()
+                .checkNoExistingFriends();
     }
 
     @Test
     @User(outcomeInvitations = 1)
     @DisplayName("Должен отображаться входящий запрос на добавление в друзья")
     void incomeInvitationBePresentInFriendsTable(UserJson user) {
-        loginPage.login(user.username(), user.testData().password());
-        mainPage.goToFriendsPage();
-        friendsPage.searchFriends(user.testData().outcomeInvitations().getFirst().username());
-        friendsPage.checkExistingInvitations(user.testData().outcomeInvitations().getFirst().username());
+        Selenide.open(LoginPage.URL, LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .goToFriendsPage()
+                .searchFriends(user.testData().outcomeInvitations().getFirst().username())
+                .checkExistingInvitations(user.testData().outcomeInvitations().getFirst().username());
     }
 
     @Test
     @User(incomeInvitations = 1)
     @DisplayName("Статус добавления в друзья должен быть в статусе Waiting...")
     void outcomeInvitationBePresentInAllPeoplesTable(UserJson user) {
-        loginPage.login(user.username(), user.testData().password());
-        mainPage.goToAllPeoplePage();
-        allPeoplePage.searchFriends(user.testData().incomeInvitations().getFirst().username());
-        allPeoplePage.checkWaitingOfUserInvitations(user.testData().incomeInvitations().getFirst().username());
+        Selenide.open(LoginPage.URL, LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .goToAllPeoplePage()
+                .searchFriends(user.testData().incomeInvitations().getFirst().username())
+                .checkWaitingOfUserInvitations(user.testData().incomeInvitations().getFirst().username());
     }
 
     @Test
@@ -76,11 +64,13 @@ public class FriendsTest {
     @DisplayName("Прием заявки в друзья")
     void acceptInvitationOfFriendship(UserJson user) {
         String nameOfUserWhoMadeIncomeInvitation = user.testData().outcomeInvitations().getFirst().username();
-        System.out.println(nameOfUserWhoMadeIncomeInvitation);
-        loginPage.login(user.username(), user.testData().password());
-        mainPage.goToFriendsPage()
+
+        Selenide.open(LoginPage.URL, LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .goToFriendsPage()
                 .checkExistingInvitations(nameOfUserWhoMadeIncomeInvitation)
                 .acceptFriendship(nameOfUserWhoMadeIncomeInvitation)
+                .checkSnackbarText("Invitation of " + nameOfUserWhoMadeIncomeInvitation + " accepted")
                 .searchFriends(nameOfUserWhoMadeIncomeInvitation)
                 .checkExistingFriends(nameOfUserWhoMadeIncomeInvitation);
     }
@@ -90,11 +80,13 @@ public class FriendsTest {
     @DisplayName("Отклонение заявки в друзья")
     void declineInvitationOfFriendship(UserJson user) {
         String nameOfUserWhoMadeIncomeInvitation = user.testData().outcomeInvitations().getFirst().username();
-        System.out.println(nameOfUserWhoMadeIncomeInvitation);
-        loginPage.login(user.username(), user.testData().password());
-        mainPage.goToFriendsPage()
+
+        Selenide.open(LoginPage.URL, LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .goToFriendsPage()
                 .checkExistingInvitations(nameOfUserWhoMadeIncomeInvitation)
                 .declineFriendship(nameOfUserWhoMadeIncomeInvitation)
+                .checkSnackbarText("Invitation of " + nameOfUserWhoMadeIncomeInvitation + " is declined")
                 .searchFriends(nameOfUserWhoMadeIncomeInvitation)
                 .checkNoExistingFriends();
     }

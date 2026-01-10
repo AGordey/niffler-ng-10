@@ -1,35 +1,37 @@
 package guru.qa.niffler.service;
 
 
+import com.google.common.base.Stopwatch;
 import guru.qa.niffler.api.UserApi;
-import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.util.RandomDataUtils;
 import io.qameta.allure.Step;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ParametersAreNonnullByDefault
-public class UserApiClient implements UserClient {
+public final class UserApiClient extends RestClient implements UserClient {
 
-    private static final Config CFG = Config.getInstance();
-
-    private final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(CFG.userdataUrl())
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build();
-    private final UserApi userApi = retrofit.create(UserApi.class);
+    private final UserApi userApi;
     AuthApiClient authApiClient = new AuthApiClient();
+
+    public UserApiClient() {
+        //Создаем клиента через которого выполняются запросы на URL
+        super(CFG.userdataUrl());
+        // Создаем объект ретрофита что бы им уже  работать в клиенте
+        // (аналог private final UserApi userApi = retrofit.create(UserApi.class);)
+        this.userApi = create(UserApi.class);  // Создаем объект ретрофита что бы им уже
+        // работать в клиенте (аналог     private final UserApi userApi= retrofit.create(UserApi.class);)
+    }
 
     @Nonnull
     @Override
@@ -39,12 +41,28 @@ public class UserApiClient implements UserClient {
         try {
             Response<Void> authResponse = authApiClient.register(username, password);
             assertEquals(HTTP_OK, authResponse.code());
-            response = userApi.currentUser(username).execute();
-            assertEquals(HTTP_OK, response.code());
+
+            Stopwatch sw = Stopwatch.createStarted();
+            long maxWaitTime = 10_000;
+
+            while (sw.elapsed(TimeUnit.MILLISECONDS) < maxWaitTime) {
+                try {
+                    UserJson userJson = userApi.currentUser(username).execute().body();
+                    if (userJson != null && userJson.id() != null) {
+                        return userJson;
+                    } else {
+                        Thread.sleep(100);
+                    }
+                } catch (IOException e) {
+                    // just wait
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         } catch (IOException e) {
             throw new AssertionError(e);
         }
-        return response.body();
+        throw new AssertionError("User was not created");
     }
 
     @Nonnull

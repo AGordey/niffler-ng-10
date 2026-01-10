@@ -59,7 +59,7 @@ public abstract class RestClient {
         .client(okHttpClient)
         .build();
   }
-
+    //https://youtu.be/LuSaiV1Coso?t=1758
   public <T> T create(Class<T> serviceClass) {
     return retrofit.create(serviceClass);
   }

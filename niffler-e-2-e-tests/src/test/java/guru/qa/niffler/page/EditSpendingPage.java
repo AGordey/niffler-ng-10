@@ -7,7 +7,6 @@ import io.qameta.allure.Step;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -19,16 +18,17 @@ import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
 public class EditSpendingPage extends BasePage<EditSpendingPage> {
+
+    private static final String URL = CFG.frontUrl() + "spending";
+
     private final SelenideElement descriptionInput = $("#description");
     private final SelenideElement saveOrAddBtn = $("#save");
     private final SelenideElement amountInput = $("#amount");
     private final SelenideElement categoryInput = $("#category");
     private final SelenideElement currency = $("#currency");
-
-
     private final Calendar calendar = new Calendar();
 
-    @Step("Устанавливаем описание траты: '{description}'")
+    @Step("Устанавливаем описание зазатраты: '{description}'")
     @Nonnull
     public EditSpendingPage setNewSpendingDescription(String description) {
         descriptionInput.val(description);
@@ -42,7 +42,7 @@ public class EditSpendingPage extends BasePage<EditSpendingPage> {
         return new MainPage();
     }
 
-    @Step("Устанавливаем сумму траты: '{amount}'")
+    @Step("Устанавливаем сумму затраты: '{amount}'")
     @Nonnull
     public EditSpendingPage setAmount(String amount) {
         amountInput.val(amount);
@@ -64,18 +64,17 @@ public class EditSpendingPage extends BasePage<EditSpendingPage> {
         return this;
     }
 
-    @Step("Устанавливаем дату траты: '{ddmmyyyy}'")
+    @Step("Устанавливаем дату затраты: '{ddmmyyyy}'")
     @Nonnull
     public EditSpendingPage setDate(String ddmmyyyy) {
         String clean = ddmmyyyy.replaceAll("[^0-9]", ""); // оставить только цифры
         LocalDate ld = LocalDate.parse(clean, DateTimeFormatter.ofPattern("ddMMyyyy"));
         Date date = Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        System.out.println("Значение в методе setDate отдаю в метод календаря " + date.toString());
         calendar.selectDateInCalendar(date);
         return this;
     }
 
-    @Step("Устанавливаем описание траты на: '{description}'")
+    @Step("Устанавливаем описание затраты на: '{description}'")
     @Nonnull
     public EditSpendingPage setDescription(String description) {
         descriptionInput.val(description);

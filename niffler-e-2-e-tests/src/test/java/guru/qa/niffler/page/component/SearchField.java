@@ -6,11 +6,14 @@ import io.qameta.allure.Step;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Selenide.$;
 
-public class SearchField {
+public class SearchField extends BaseComponent<SearchField>{
 
-    private final SelenideElement self = $("input[aria-label='search']");
     private final SelenideElement searchButton = self.$("button[id='input-submit']");
     private final SelenideElement clearSearchButton = self.$("button[id='input-clear']");
+
+    public SearchField() {
+        super($("input[aria-label='search']"));
+    }
 
     @Step("Ищем '{query}' в поисковой строке")
     public SearchField search(String query) {

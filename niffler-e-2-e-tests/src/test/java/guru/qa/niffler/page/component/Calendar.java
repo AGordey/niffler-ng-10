@@ -17,9 +17,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
-public class Calendar {
+public class Calendar extends BaseComponent<Calendar> {
 
-    private final SelenideElement self = $(".MuiInputBase-adornedEnd");
     private final SelenideElement inputField = self.$("input[name='date']");
     private final SelenideElement calendarButton = self.$("input[name='date']").$("button");
     private final SelenideElement openDatesButton = self.$("button");
@@ -30,8 +29,10 @@ public class Calendar {
     private final SelenideElement previousMonthButton = dateCalendar.find("button[title='Previous month']");
     private final SelenideElement nextMonthButton = dateCalendar.find("button[title='Next month']");
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH);
-    private final ElementsCollection dayCalendarList = dateCalendar.find(".MuiDayCalendar-monthContainer")
-            .findAll("button");
+
+    public Calendar() {
+        super($(".MuiInputBase-adornedEnd"));
+    }
 
     @Step("Выбираем '{date}' в компоненте календарь ")
     public Calendar selectDateInCalendar(Date date) {
@@ -76,7 +77,6 @@ public class Calendar {
             }
         }
     }
-
 
     private void selectYearFromDate(LocalDate date) throws IllegalArgumentException {
         int year = date.getYear();
