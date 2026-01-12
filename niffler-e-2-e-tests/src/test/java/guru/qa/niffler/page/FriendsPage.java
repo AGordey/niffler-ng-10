@@ -13,10 +13,17 @@ public class FriendsPage {
     private final SelenideElement tableWithAllFriends = $("#friends");
     private final SelenideElement requestsTable = $("#requests");
     private final SelenideElement allPeoplePage = $(byText("All people"));
+    private final SelenideElement searchField = $("input[aria-label='search']");
 
     @Step("Check that person is friend")
     public FriendsPage checkExistingFriends(String expectedUsername) {
         tableWithAllFriends.shouldHave(text(expectedUsername));
+        return this;
+    }
+
+
+    public FriendsPage searchFriends(String username) {
+        searchField.setValue(username).pressEnter();
         return this;
     }
 
@@ -30,8 +37,8 @@ public class FriendsPage {
         return this;
     }
 
-    public PeoplePage goToPeoplePage() {
+    public AllPeoplePage goToPeoplePage() {
         allPeoplePage.click();
-        return new PeoplePage();
+        return new AllPeoplePage();
     }
 }

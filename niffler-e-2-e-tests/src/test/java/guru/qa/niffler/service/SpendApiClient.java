@@ -11,7 +11,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,7 +24,7 @@ public class SpendApiClient implements SpendClient {
             .build();
 
     private final SpendApi spendApi = retrofit.create(SpendApi.class);
-    
+
     @Override
     public SpendJson createSpend(SpendJson spend) {
         final Response<SpendJson> response;
@@ -131,4 +130,7 @@ public class SpendApiClient implements SpendClient {
         return response.body();
     }
 
+    public void deleteCategory(CategoryJson category) {
+        throw new UnsupportedOperationException("Method not implemented yet");
+    }
 }

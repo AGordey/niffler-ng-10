@@ -1,24 +1,18 @@
 package guru.qa.niffler.test.web;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.jupiter.annotation.UserType;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
-import guru.qa.niffler.jupiter.extension.UsersQueueExtension;
-import guru.qa.niffler.model.StaticUser;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.FriendsPage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
-import guru.qa.niffler.page.PeoplePage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import guru.qa.niffler.page.AllPeoplePage;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static guru.qa.niffler.jupiter.annotation.UserType.Type.*;
 
 @ExtendWith(BrowserExtension.class)
 @WebTest
@@ -28,7 +22,7 @@ public class FriendsTest {
     LoginPage loginPage = new LoginPage();
     MainPage mainPage = new MainPage();
     FriendsPage friendsPage = new FriendsPage();
-    PeoplePage peoplePage = new PeoplePage();
+    AllPeoplePage allPeoplePage = new AllPeoplePage();
 
     @BeforeEach
     void setUp() {
@@ -41,35 +35,36 @@ public class FriendsTest {
     void friendShouldBePresentInFriendsTable(UserJson user) {
         loginPage.login(user.username(), user.testData().password());
         mainPage.goToFriendsPage();
+        friendsPage.searchFriends(user.testData().friends().getFirst().username());
         friendsPage.checkExistingFriends(user.testData().friends().getFirst().username());
-
     }
 
     @Test
-    @ExtendWith(UsersQueueExtension.class)
+    @User()
     @DisplayName("Таблица друзей должна быть пустой")
-    void friendsTableShouldBeEmptyForNewUser(@UserType(EMPTY) StaticUser user) {
-        loginPage.login(user.username(), user.password());
+    void friendsTableShouldBeEmptyForNewUser(UserJson user) {
+        loginPage.login(user.username(), user.testData().password());
         mainPage.goToFriendsPage();
         friendsPage.checkNoExistingFriends();
     }
 
     @Test
-    @ExtendWith(UsersQueueExtension.class)
+    @User(outcomeInvitations = 1)
     @DisplayName("Должен отображаться входящий запрос на добавление в друзья")
-    void incomeInvitationBePresentInFriendsTable(@UserType(WITH_INCOME_REQUEST) StaticUser user) {
-        loginPage.login(user.username(), user.password());
+    void incomeInvitationBePresentInFriendsTable(UserJson user) {
+        loginPage.login(user.username(), user.testData().password());
         mainPage.goToFriendsPage();
-        friendsPage.checkExistingInvitations(user.income());
+        friendsPage.searchFriends(user.testData().outcomeInvitations().getFirst().username());
+        friendsPage.checkExistingInvitations(user.testData().outcomeInvitations().getFirst().username());
     }
 
     @Test
-    @ExtendWith(UsersQueueExtension.class)
+    @User(incomeInvitations = 1)
     @DisplayName("Статус добавления в друзья должен быть в статусе Waiting...")
-    void outcomeInvitationBePresentInAllPeoplesTable(@UserType(WITH_OUTCOME_REQUEST) StaticUser user) {
-        loginPage.login(user.username(), user.password());
-        mainPage.goToFriendsPage();
-        friendsPage.goToPeoplePage();
-        peoplePage.checkWaitingOfUserInvitations(user.outcome());
+    void outcomeInvitationBePresentInAllPeoplesTable(UserJson user) {
+        loginPage.login(user.username(), user.testData().password());
+        mainPage.goToAllPeoplePage();
+        allPeoplePage.searchFriends(user.testData().incomeInvitations().getFirst().username());
+        allPeoplePage.checkWaitingOfUserInvitations(user.testData().incomeInvitations().getFirst().username());
     }
 }

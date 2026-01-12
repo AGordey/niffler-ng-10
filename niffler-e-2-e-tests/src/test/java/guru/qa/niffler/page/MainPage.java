@@ -14,6 +14,8 @@ public class MainPage {
     private final SelenideElement profileOfUser = $(withText("Profile"));
     private final SelenideElement statisticsPart = $("#stat");
     private final SelenideElement friendsPage = $(byText("Friends"));
+    private final SelenideElement allPeople = $(withText("All People"));
+    private final SelenideElement searchField = $("input[aria-label='search']");
 
     public MainPage checkThatPageLoaded() {
         spendingTable.should(visible);
@@ -31,6 +33,11 @@ public class MainPage {
         return this;
     }
 
+    public MainPage searchSpending(String spendingDescription) {
+        searchField.setValue(spendingDescription).pressEnter();
+        return this;
+    }
+
     public ProfilePage goToProfilePage() {
         menuOfUser.click();
         profileOfUser.click();
@@ -41,5 +48,11 @@ public class MainPage {
         menuOfUser.click();
         friendsPage.click();
         return new FriendsPage();
+    }
+
+    public AllPeoplePage goToAllPeoplePage() {
+        menuOfUser.click();
+        allPeople.click();
+        return new AllPeoplePage();
     }
 }
