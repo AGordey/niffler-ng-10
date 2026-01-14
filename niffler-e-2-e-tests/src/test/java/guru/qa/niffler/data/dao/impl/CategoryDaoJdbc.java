@@ -3,9 +3,8 @@ package guru.qa.niffler.data.dao.impl;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.dao.CategoryDao;
 import guru.qa.niffler.data.entity.spend.CategoryEntity;
-import org.jetbrains.annotations.NotNull;
-
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +16,7 @@ import java.util.UUID;
 
 import static guru.qa.niffler.data.jdbc.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class CategoryDaoJdbc implements CategoryDao {
 
     private static final Config CFG = Config.getInstance();
@@ -25,7 +25,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Nonnull
     @Override
     @SuppressWarnings("resource")
-    public CategoryEntity create(@NotNull CategoryEntity category) {
+    public CategoryEntity create(CategoryEntity category) {
         try (PreparedStatement ps = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
                 "INSERT INTO \"category\" (username, name, archived) " +
                         "VALUES (?, ?, ?)",
@@ -133,7 +133,7 @@ public class CategoryDaoJdbc implements CategoryDao {
 
     @Override
     @SuppressWarnings("resource")
-    public void delete(@NotNull CategoryEntity category) {
+    public void delete(CategoryEntity category) {
         this.category = category;
         try (PreparedStatement ps = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
                 "DELETE FROM \"category\" WHERE id = ? "
@@ -148,7 +148,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     @Nonnull
     @Override
     @SuppressWarnings("resource")
-    public CategoryEntity update(@NotNull CategoryEntity category) {
+    public CategoryEntity update(CategoryEntity category) {
         try (PreparedStatement ps = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
                 "UPDATE \"category\" SET name = ?, username = ? archived = ? " +
                         "WHERE id = ?"

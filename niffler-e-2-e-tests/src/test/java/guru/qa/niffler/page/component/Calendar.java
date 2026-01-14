@@ -35,7 +35,7 @@ public class Calendar {
 
     @Step("Выбираем '{date}' в компоненте календарь ")
     public Calendar selectDateInCalendar(Date date) {
-        if (checkDateFromFuture(date)) {
+        if (dateNotFromFuture(date)) {
             LocalDate inputDate = date.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
@@ -47,7 +47,7 @@ public class Calendar {
         return this;
     }
 
-    private boolean checkDateFromFuture(Date date) throws IllegalArgumentException {
+    private boolean dateNotFromFuture(Date date) throws IllegalArgumentException {
         LocalDate inputDate = date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();

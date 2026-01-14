@@ -70,7 +70,6 @@ public class EditSpendingPage {
         String clean = ddmmyyyy.replaceAll("[^0-9]", ""); // оставить только цифры
         LocalDate ld = LocalDate.parse(clean, DateTimeFormatter.ofPattern("ddMMyyyy"));
         Date date = Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        System.out.println("Значение в методе setDate отдаю в метод календаря " + date.toString());
         calendar.selectDateInCalendar(date);
         return this;
     }

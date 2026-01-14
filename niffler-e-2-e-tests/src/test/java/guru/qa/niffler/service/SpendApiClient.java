@@ -144,6 +144,6 @@ public class SpendApiClient implements SpendClient {
 
     @Step("Удаляем категорию: {category}")
     public void deleteCategory(CategoryJson category) {
-        throw new UnsupportedOperationException("Метод ещё не реализован");
+        throw new UnsupportedOperationException("Метод не планируется к реализации через API");
     }
 }
