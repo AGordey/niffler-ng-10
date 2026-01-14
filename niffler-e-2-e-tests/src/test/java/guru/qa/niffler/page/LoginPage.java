@@ -19,7 +19,7 @@ public class LoginPage {
     private final SelenideElement errorMessage = $(".form__error");
 
     @Nonnull
-    @Step("Success login and go to Main page")
+    @Step("Успешная авторизация и переход на главную страницу")
     public MainPage login(String username, String password) {
         usernameInput.val(username);
         passwordInput.val(password);
@@ -28,14 +28,14 @@ public class LoginPage {
     }
 
     @Nonnull
-    @Step("Go to registration page from Login page")
+    @Step("Переход на страницу регистрации пользователя со страницы логина")
     public RegisterPage goToRegistrationPage() {
         registerButton.click();
         return new RegisterPage();
     }
 
     @Nonnull
-    @Step("Check login page is loaded")
+    @Step("Проверка что страница логина загрузилась")
     public LoginPage checkLoginPageLoaded() {
         usernameInput.shouldBe(visible);
         passwordInput.shouldBe(visible);

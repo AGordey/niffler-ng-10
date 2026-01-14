@@ -21,7 +21,7 @@ public class RegisterPage {
             successMessage = $(".form__paragraph_success");
 
     @Nonnull
-    @Step("Create a new user ")
+    @Step("Регистрируем нового пользователя: имя '{userName}', пароль скрыт")
     public RegisterPage fillAndSubmitRegistration(String userName, String password, String confirmPassword) {
         usernameInput.setValue(userName);
         passwordInput.setValue(password);
@@ -31,56 +31,56 @@ public class RegisterPage {
     }
 
     @Nonnull
-    @Step("Set user name '{userName}' ")
+    @Step("Устанавливаем имя пользователя: '{userName}'")
     public RegisterPage setUsername(String userName) {
         usernameInput.setValue(userName);
         return this;
     }
 
     @Nonnull
-    @Step("Set password '{password}'")
+    @Step("Устанавливаем пароль")
     public RegisterPage setPassword(String password) {
         passwordInput.setValue(password);
         return this;
     }
 
     @Nonnull
-    @Step("Set password '{password}'")
+    @Step("Подтверждаем пароль")
     public RegisterPage setPasswordSubmit(String password) {
         passwordSubmitInput.setValue(password);
         return this;
     }
 
     @Nonnull
-    @Step("Click sign up button ")
+    @Step("Нажимаем кнопку 'Зарегистрироваться'")
     public RegisterPage submitRegistration() {
         sighUpButton.click();
         return this;
     }
 
     @Nonnull
-    @Step("Click sign in button after registration to Login page ")
+    @Step("Переходим на страницу входа, нажав кнопку 'Войти'")
     public LoginPage sighInButtonToLoginPage() {
         signInButton.click();
         return new LoginPage();
     }
 
     @Nonnull
-    @Step("Check success message")
+    @Step("Проверяем сообщение об успешной регистрации")
     public RegisterPage checkSuccessMessage() {
         successMessage.shouldHave(text("Congratulations! You've registered!"));
         return this;
     }
 
     @Nonnull
-    @Step("Check Error message")
+    @Step("Проверяем сообщение об ошибке: '{message}'")
     public RegisterPage checkErrorMessage(String message) {
         errorMessage.shouldHave(text(message));
         return this;
     }
 
     @Nonnull
-    @Step("Check Error message")
+    @Step("Проверяем сообщение об ошибке, содержащее текст: '{text}'")
     public RegisterPage checkErrorMessageWithText(String text) {
         errorMessage.shouldHave(text(text));
         return this;
