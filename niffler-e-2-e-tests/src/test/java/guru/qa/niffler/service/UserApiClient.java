@@ -11,6 +11,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,15 @@ import java.util.List;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ParametersAreNonnullByDefault
 public class UserApiClient implements UserClient {
 
     private static final Config CFG = Config.getInstance();
 
-    private final Retrofit retrofit = new Retrofit.Builder().baseUrl(CFG.userdataUrl()).addConverterFactory(JacksonConverterFactory.create()).build();
+    private final Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(CFG.userdataUrl())
+            .addConverterFactory(JacksonConverterFactory.create())
+            .build();
     private final UserApi userApi = retrofit.create(UserApi.class);
     AuthApiClient authApiClient = new AuthApiClient();
 

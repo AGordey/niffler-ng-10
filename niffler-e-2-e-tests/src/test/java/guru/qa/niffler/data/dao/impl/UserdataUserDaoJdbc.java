@@ -5,7 +5,11 @@ import guru.qa.niffler.data.dao.UserdataUserDao;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
-import java.sql.*;
+import javax.annotation.Nonnull;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +21,9 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
 
     private static final Config CFG = Config.getInstance();
 
+    @Nonnull
     @Override
+    @SuppressWarnings("resource")
     public UserEntity create(UserEntity user) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "INSERT INTO \"user\" (username, firstname," +
@@ -52,7 +58,9 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
         }
     }
 
+    @Nonnull
     @Override
+    @SuppressWarnings("resource")
     public List<UserEntity> findAll() {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\" ")) {
@@ -77,7 +85,9 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
         }
     }
 
+    @Nonnull
     @Override
+    @SuppressWarnings("resource")
     public Optional<UserEntity> findById(UUID id) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\" WHERE id = ?"
@@ -104,7 +114,9 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
         }
     }
 
+    @Nonnull
     @Override
+    @SuppressWarnings("resource")
     public Optional<UserEntity> findByUsername(String username) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\" WHERE username = ?"
@@ -132,6 +144,7 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
     }
 
     @Override
+    @SuppressWarnings("resource")
     public void delete(UserEntity user) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "DELETE FROM \"user\" WHERE id = ? "

@@ -7,6 +7,8 @@ import guru.qa.niffler.data.entity.auth.Authority;
 import guru.qa.niffler.data.mapper.AuthUserEntityRowMapper;
 import guru.qa.niffler.data.repository.AuthUserRepository;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,11 +20,13 @@ import java.util.UUID;
 
 import static guru.qa.niffler.data.jdbc.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     private static final Config CFG = Config.getInstance();
     private static final String URL = CFG.authJdbcUrl();
 
+    @Nonnull
     @Override
     public AuthUserEntity create(AuthUserEntity authUserEntity) {
         try (PreparedStatement userPs = holder(URL).connection().prepareStatement(
@@ -63,6 +67,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
         }
     }
 
+    @Nonnull
     @Override
     public AuthUserEntity update(AuthUserEntity user) {
         try (PreparedStatement ps = holder(URL).connection().prepareStatement(
@@ -85,6 +90,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
         }
     }
 
+    @Nonnull
     @Override
     public Optional<AuthUserEntity> findById(UUID id) {
         try (PreparedStatement ps = holder(URL).connection().prepareStatement(
@@ -119,6 +125,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
         }
     }
 
+    @Nonnull
     @Override
     public Optional<AuthUserEntity> findByUsername(String username) {
         try (PreparedStatement ps = holder(URL).connection().prepareStatement(

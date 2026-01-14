@@ -3,9 +3,13 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
+@ParametersAreNonnullByDefault
 public class LoginPage {
     private final SelenideElement usernameInput = $("#username");
     private final SelenideElement passwordInput = $("#password");
@@ -14,7 +18,8 @@ public class LoginPage {
     private final SelenideElement registerButton = $("#register-button");
     private final SelenideElement errorMessage = $(".form__error");
 
-    @Step("Success login and go to Main page")
+    @Nonnull
+    @Step("Успешная авторизация и переход на главную страницу")
     public MainPage login(String username, String password) {
         usernameInput.val(username);
         passwordInput.val(password);
@@ -22,13 +27,15 @@ public class LoginPage {
         return new MainPage();
     }
 
-    @Step("Go to registration page from Login page")
+    @Nonnull
+    @Step("Переход на страницу регистрации пользователя со страницы логина")
     public RegisterPage goToRegistrationPage() {
         registerButton.click();
         return new RegisterPage();
     }
 
-    @Step("Check login page is loaded")
+    @Nonnull
+    @Step("Проверка что страница логина загрузилась")
     public LoginPage checkLoginPageLoaded() {
         usernameInput.shouldBe(visible);
         passwordInput.shouldBe(visible);
