@@ -7,6 +7,7 @@ import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.service.SpendClient;
 import guru.qa.niffler.service.UserDbClient;
+import guru.qa.niffler.util.RandomDataUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,6 +21,7 @@ public class JdbcTest {
     private SpendClient spendCLient;
     @Test
     void txTest() {
+        String randomUsername = RandomDataUtils.randomUsername();
         SpendJson spend = spendCLient.createSpend(
                 new SpendJson(
                         null,
@@ -27,13 +29,13 @@ public class JdbcTest {
                         new CategoryJson(
                                 null,
                                 "Кошкин дом",
-                                "sanek-1",
+                                randomUsername,
                                 false
                         ),
                         CurrencyValues.RUB,
                         1000.0,
                         "Кошкин дом ноябрь",
-                        "sanek-1"
+                        randomUsername
                 )
         );
 
@@ -43,12 +45,12 @@ public class JdbcTest {
     static UserDbClient usersDbClient = new UserDbClient();
 
     @ValueSource(strings = {
-            "sanek-6"
+            "sanek-"
     })
     @ParameterizedTest
     void springJdbcTest(String uname) {
         UserJson user = usersDbClient.createUser(
-                uname,
+                uname.concat(RandomDataUtils.randomName()),
                 "12345"
         );
 

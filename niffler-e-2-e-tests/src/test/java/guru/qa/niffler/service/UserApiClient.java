@@ -127,4 +127,16 @@ public final class UserApiClient extends RestClient implements UserClient {
         return result;
     }
 
+    @Nonnull
+    public List<UserJson> getAll(String username) {
+        List<UserJson> resultList = null;
+        try {
+            Response<List<UserJson>> response = userApi.allUsers(username, null).execute();
+            assertEquals(HTTP_OK, response.code());
+            resultList = response.body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return resultList;
+    }
 }
