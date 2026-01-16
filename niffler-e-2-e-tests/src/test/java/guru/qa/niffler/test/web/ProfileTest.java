@@ -72,7 +72,7 @@ public class ProfileTest {
                 .login(user.username(), user.testData().password())
                 .checkThatPageLoaded();
 
-        Selenide.open(ProfilePage.URL + "profile", ProfilePage.class)
+        Selenide.open(ProfilePage.URL, ProfilePage.class)
                 .setNewName(testUsername)
                 .pressSaveChangesBtn()
                 .checkSnackbarText("Profile successfully updated");

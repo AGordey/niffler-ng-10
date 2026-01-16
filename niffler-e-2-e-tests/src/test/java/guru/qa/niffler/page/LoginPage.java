@@ -51,7 +51,6 @@ public class LoginPage extends BasePage<LoginPage> {
     @Nonnull
     @Step("Проверка что страница логина загрузилась")
     public LoginPage checkLoginPageLoaded() {
-        Thread.sleep(200);
         usernameInput.shouldBe(visible);
         passwordInput.shouldBe(visible);
         logInButton.shouldBe(visible);

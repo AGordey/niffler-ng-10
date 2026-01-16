@@ -1,12 +1,14 @@
 package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
+import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static guru.qa.niffler.util.RandomDataUtils.randomUsername;
 
+@WebTest
 public class RegisterTest {
 
     @Test
