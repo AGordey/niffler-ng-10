@@ -28,7 +28,7 @@ public class EditSpendingPage extends BasePage<EditSpendingPage> {
     private final SelenideElement currency = $("#currency");
     private final Calendar calendar = new Calendar();
 
-    @Step("Устанавливаем описание зазатраты: '{description}'")
+    @Step("Устанавливаем описание затраты: '{description}'")
     @Nonnull
     public EditSpendingPage setNewSpendingDescription(String description) {
         descriptionInput.val(description);
