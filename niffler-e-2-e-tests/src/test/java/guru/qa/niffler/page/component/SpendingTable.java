@@ -12,14 +12,18 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
-public class SpendingTable {
-    private final SelenideElement self = $("#spendings");
+public class SpendingTable extends BaseComponent<SpendingTable> {
+
     private final SelenideElement periodOfSpendings = self.$("#period");
     private final SelenideElement editSpendingButton = self.$("[aria-label='Edit spending']");
     private final ElementsCollection menuOfPeriod = $("[role='listbox']").$$("li");
     private final SelenideElement deleteButton = self.$("#delete");
     private final SearchField searchField = new SearchField();
     private final ElementsCollection spendingRows = self.$("tbody").$$("tr");
+
+    public SpendingTable() {
+        super($("#spendings"));
+    }
 
     @Step("Выбираем период '{period}' в выпадающем меню")
     public SpendingTable selectPeriod(DataFilterValues period) {
@@ -28,17 +32,20 @@ public class SpendingTable {
         menuOfPeriod.find(text(periodStr)).click();
         return this;
     }
+
     @Step("Ищем запись по описанию '{description}'")
     public EditSpendingPage editSpending(String description) {
         searchSpendingByDescription(description);
         editSpendingButton.click();
         return new EditSpendingPage();
     }
+
     @Step("Удаляем запись о растрате с описанием '{description}'")
     public SpendingTable searchSpendingByDescription(String description) {
         searchField.search(description);
         return this;
     }
+
     @Step("Удаляем запись о растрате")
     public SpendingTable deleteSpending(String description) {
         searchSpendingByDescription(description);
@@ -46,7 +53,8 @@ public class SpendingTable {
         deleteButton.$(byText("Delete")).click();
         return this;
     }
-    @Step("Проверяем, что таблица содержит траты: {expectedSpends}")
+
+    @Step("Проверяем, что таблица содержит затраты: {expectedSpends}")
     public SpendingTable checkTableContains(String... expectedSpends) {
         for (String spend : expectedSpends) {
             searchField.clearIfNotEmpty();
@@ -55,6 +63,7 @@ public class SpendingTable {
         }
         return this;
     }
+
     @Step("Проверяем, что таблица содержит '{expectedSize}' элемент(ов)")
     public SpendingTable checkTableSize(int expectedSize) {
         spendingRows.should(size(expectedSize));

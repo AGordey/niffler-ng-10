@@ -8,6 +8,8 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
+import static guru.qa.niffler.util.RandomDataUtils.randomUsername;
+
 public class RegistrationTest {
 
   private final AuthApiClient authApiClient = new AuthApiClient();
@@ -15,7 +17,7 @@ public class RegistrationTest {
   @Test
   @Disabled
   void newUserShouldRegisteredByApiCall() throws IOException {
-    final Response<Void> response = authApiClient.register("bazz", "12345");
+    final Response<Void> response = authApiClient.register(randomUsername(), "12345");
     Assertions.assertEquals(201, response.code());
   }
 }

@@ -17,17 +17,18 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
-public class EditSpendingPage {
+public class EditSpendingPage extends BasePage<EditSpendingPage> {
+
+    private static final String URL = CFG.frontUrl() + "spending";
+
     private final SelenideElement descriptionInput = $("#description");
     private final SelenideElement saveOrAddBtn = $("#save");
     private final SelenideElement amountInput = $("#amount");
     private final SelenideElement categoryInput = $("#category");
     private final SelenideElement currency = $("#currency");
-
-
     private final Calendar calendar = new Calendar();
 
-    @Step("Устанавливаем описание траты: '{description}'")
+    @Step("Устанавливаем описание затраты: '{description}'")
     @Nonnull
     public EditSpendingPage setNewSpendingDescription(String description) {
         descriptionInput.val(description);
@@ -41,7 +42,7 @@ public class EditSpendingPage {
         return new MainPage();
     }
 
-    @Step("Устанавливаем сумму траты: '{amount}'")
+    @Step("Устанавливаем сумму затраты: '{amount}'")
     @Nonnull
     public EditSpendingPage setAmount(String amount) {
         amountInput.val(amount);
@@ -63,7 +64,7 @@ public class EditSpendingPage {
         return this;
     }
 
-    @Step("Устанавливаем дату траты: '{ddmmyyyy}'")
+    @Step("Устанавливаем дату затраты: '{ddmmyyyy}'")
     @Nonnull
     public EditSpendingPage setDate(String ddmmyyyy) {
         String clean = ddmmyyyy.replaceAll("[^0-9]", ""); // оставить только цифры
@@ -73,7 +74,7 @@ public class EditSpendingPage {
         return this;
     }
 
-    @Step("Устанавливаем описание траты на: '{description}'")
+    @Step("Устанавливаем описание затраты на: '{description}'")
     @Nonnull
     public EditSpendingPage setDescription(String description) {
         descriptionInput.val(description);

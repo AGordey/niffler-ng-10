@@ -1,17 +1,15 @@
 package guru.qa.niffler.service;
 
 import guru.qa.niffler.api.SpendApi;
-import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import io.qameta.allure.Step;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -19,16 +17,15 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SpendApiClient implements SpendClient {
+@ParametersAreNonnullByDefault
+public final class SpendApiClient extends RestClient implements SpendClient {
 
-    private static final Config CFG = Config.getInstance();
+    private final SpendApi spendApi;
 
-    private final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(CFG.spendUrl())
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build();
-
-    private final SpendApi spendApi = retrofit.create(SpendApi.class);
+    public SpendApiClient() {
+        super(CFG.spendUrl());
+        this.spendApi = create(SpendApi.class);
+    }
 
     @Nonnull
     @Override
@@ -71,7 +68,7 @@ public class SpendApiClient implements SpendClient {
     }
 
     @Nonnull
-    @Step("Получаем все траты пользователя '{username}'")
+    @Step("Получаем все затраты пользователя '{username}'")
     public List<SpendJson> getAllSpends(String username,
                                         @Nullable CurrencyValues currency,
                                         @Nullable String from,
@@ -88,7 +85,7 @@ public class SpendApiClient implements SpendClient {
                 : Collections.emptyList();
     }
 
-    @Step("Удаляем траты пользователя '{username}' с ID: {ids}")
+    @Step("Удаляем затраты пользователя '{username}' с ID: {ids}")
     public void deleteSpend(String username, List<String> ids) {
         final Response<Void> response;
         try {
@@ -144,6 +141,6 @@ public class SpendApiClient implements SpendClient {
 
     @Step("Удаляем категорию: {category}")
     public void deleteCategory(CategoryJson category) {
-        throw new UnsupportedOperationException("Метод не планируется к реализации через API");
+        throw new UnsupportedOperationException("Метод ещё не реализован");
     }
 }

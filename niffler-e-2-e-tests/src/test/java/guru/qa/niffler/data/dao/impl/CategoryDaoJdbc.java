@@ -24,8 +24,8 @@ public class CategoryDaoJdbc implements CategoryDao {
     private CategoryEntity category;
 
     @Nonnull
-    @Override
-    @SuppressWarnings("resource")
+  @Override
+  @SuppressWarnings("resource")
     public CategoryEntity create(CategoryEntity category) {
         try (PreparedStatement ps = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
                 "INSERT INTO \"category\" (username, name, archived) " +

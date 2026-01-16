@@ -11,13 +11,20 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
-public class Header {
-    private final SelenideElement self = $("#root header");
+public class Header extends BaseComponent<Header> {
 
     private final SelenideElement newSpendingButton = self.find("[href='/spending']");
     private final SelenideElement menuButton = self.find("button[aria-label='Menu']");
     private final SelenideElement mainPageButton = self.find("[href='/main']");
     private final ElementsCollection menuItems = self.$$("li");
+
+    public Header() {
+        super($("#root header"));
+    }
+
+    public Header(SelenideElement self) {
+        super(self);
+    }
 
     @Step("Переходим на станицу Friends")
     public FriendsPage toFriendsPage() {
@@ -25,29 +32,34 @@ public class Header {
         menuItems.find(text("Friends")).click();
         return new FriendsPage();
     }
+
     @Step("Переходим на станицу All People")
     public AllPeoplePage toAllPeoplePage() {
         menuButton.click();
         menuItems.find(text("All People")).click();
         return new AllPeoplePage();
     }
+
     @Step("Переходим на станицу Profile")
     public ProfilePage toProfilePage() {
         menuButton.click();
         menuItems.find(text("Profile")).click();
         return new ProfilePage();
     }
+
     @Step("Переходим на станицу Login")
     public LoginPage toLoginPage() {
         menuButton.click();
         menuItems.find(text("Sign out")).click();
         return new LoginPage();
     }
+
     @Step("Переходим на станицу Add Spending")
     public EditSpendingPage addSpendingPage() {
         newSpendingButton.click();
         return new EditSpendingPage();
     }
+
     @Step("Переходим на станицу Main")
     public MainPage toMainPage() {
         mainPageButton.click();
