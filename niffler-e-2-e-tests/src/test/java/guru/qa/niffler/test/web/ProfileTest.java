@@ -46,7 +46,7 @@ public class ProfileTest {
 
     }
 
-    @User()
+    @User
     @Test
     @DisplayName("Тест на редактирование имени в профиле")
     void editingProfile(UserJson user) {
@@ -62,7 +62,7 @@ public class ProfileTest {
     }
 
 
-    @User()
+    @User
     @Test
     @DisplayName("Тест на редактирование имени в профиле")
     void nameShouldBeEditedInProfile(UserJson user) {

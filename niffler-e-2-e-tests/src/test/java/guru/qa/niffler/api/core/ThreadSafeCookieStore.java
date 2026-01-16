@@ -1,10 +1,6 @@
 package guru.qa.niffler.api.core;
 
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.CookieStore;
-import java.net.HttpCookie;
-import java.net.URI;
+import java.net.*;
 import java.util.List;
 
 public enum ThreadSafeCookieStore implements CookieStore {

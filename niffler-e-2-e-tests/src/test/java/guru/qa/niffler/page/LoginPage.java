@@ -37,7 +37,7 @@ public class LoginPage extends BasePage<LoginPage> {
         usernameInput.val(username);
         passwordInput.val(password);
         logInButton.click();
-        return new LoginPage();
+        return this;
     }
 
     @Nonnull

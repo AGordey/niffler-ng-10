@@ -1,17 +1,13 @@
 package guru.qa.niffler.test.web;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.page.EditSpendingPage;
 import guru.qa.niffler.page.LoginPage;
-import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.component.Header;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
