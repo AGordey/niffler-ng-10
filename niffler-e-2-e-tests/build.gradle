@@ -142,3 +142,14 @@ tasks.register('printVersion') {
         println project.version
     }
 }
+//Добавлено, т.к. команда gradle allureServe не срабатывала
+test {
+    options {
+        systemProperties(System.getProperties())
+    }
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+    useJUnitPlatform()
+}

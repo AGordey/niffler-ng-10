@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class SearchField extends BaseComponent<SearchField>{
 
     private final SelenideElement searchButton = self.$("button[id='input-submit']");
-    private final SelenideElement clearSearchButton = self.$("button[id='input-clear']");
+    private final SelenideElement clearSearchButton = self.parent().parent().$("button[id='input-clear']");
 
     public SearchField() {
         super($("input[aria-label='search']"));
@@ -17,8 +17,7 @@ public class SearchField extends BaseComponent<SearchField>{
 
     @Step("Ищем '{query}' в поисковой строке")
     public SearchField search(String query) {
-        self.setValue(query);
-        searchButton.click();
+        self.setValue(query).pressEnter();
         return this;
     }
 
@@ -26,7 +25,7 @@ public class SearchField extends BaseComponent<SearchField>{
     public SearchField clearIfNotEmpty() {
         String currentValue = self.getValue();
         if (currentValue != null && !currentValue.isEmpty()) {
-            self.parent().$("button#input-clear").click();
+            clearSearchButton.click();
         }
         self.should(empty);
         return this;
