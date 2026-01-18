@@ -90,7 +90,7 @@ public class ProfileTest {
     }
 
     @User
-    @Test // Не требуется, поскольку мы уже в @ScreenShotTest ее включили
+    //@Test Не требуется, поскольку мы уже в @ScreenShotTest ее включили
     @DisplayName("Скриншот тест на установку аватара")
     @ScreenShotTest("img/avatar/expected-avatar.png")
     void newAvatarInProfile(UserJson user, BufferedImage expected) throws IOException {
