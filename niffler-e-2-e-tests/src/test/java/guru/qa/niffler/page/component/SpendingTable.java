@@ -17,7 +17,8 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
     private final SelenideElement periodOfSpendings = self.$("#period");
     private final SelenideElement editSpendingButton = self.$("[aria-label='Edit spending']");
     private final ElementsCollection menuOfPeriod = $("[role='listbox']").$$("li");
-    private final SelenideElement deleteButton = self.$("#delete");
+    private final SelenideElement deleteButtonOnPage = self.$("#delete");
+    private final SelenideElement deleteButtonInDialog =  $("[aria-describedby='alert-dialog-slide-description']").$(byText("Delete"));
     private final SearchField searchField = new SearchField();
     private final ElementsCollection spendingRows = self.$("tbody").$$("tr");
 
@@ -40,7 +41,7 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
         return new EditSpendingPage();
     }
 
-    @Step("Удаляем запись о растрате с описанием '{description}'")
+    @Step("Поиск запись о растрате с описанием '{description}'")
     public SpendingTable searchSpendingByDescription(String description) {
         searchField.search(description);
         return this;
@@ -50,7 +51,8 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
     public SpendingTable deleteSpending(String description) {
         searchSpendingByDescription(description);
         spendingRows.first().find("[type='checkbox']").click();
-        deleteButton.$(byText("Delete")).click();
+        deleteButtonOnPage.click();
+        deleteButtonInDialog.click();
         return this;
     }
 
