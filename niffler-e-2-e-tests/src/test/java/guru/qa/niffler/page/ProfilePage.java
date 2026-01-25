@@ -20,7 +20,7 @@ public class ProfilePage extends BasePage<ProfilePage> {
 
     private final SelenideElement
             avatarOfUser = $("#PersonIcon"),
-            uploadNewPictureButton = $(withText("Upload new picture")),
+            uploadNewPictureButton = $("#image__input"),
             registerPasskeyButton = $(byText("Register Passkey")),
             saveChangesButton = $("button[type='submit']"),
             userNameField = $("#username"),
@@ -89,6 +89,15 @@ public class ProfilePage extends BasePage<ProfilePage> {
     @Step("Добавляем новую архивную категорию: '{category}'")
     public ProfilePage addNewArchiveCategory(String category) {
         categoryField.setValue(category).pressEnter();
+        $(byText(category)).parent().parent().$("[aria-label='Archive category']").click();
+        $(byText("Archive category")).parent().$(byText("Archive")).click();
+        return this;
+    }
+    @Nonnull
+    @Step("Делаем категорию '{category}' архивной")
+    public ProfilePage makeCategoryArchive(String category) {
+        $(byText(category)).parent().parent().$("[aria-label='Archive category']").click();
+        $(byText("Archive category")).parent().$(byText("Archive")).click();
         return this;
     }
 
@@ -103,6 +112,14 @@ public class ProfilePage extends BasePage<ProfilePage> {
     @Step("Отображаем как активные, так и архивные категории")
     public ProfilePage showActiveAndArchivedCategoriesList() {
         toggleShowArchived.click();
+        return this;
+    }
+
+    @Nonnull
+    @Step("Устанавливаем новый аватар")
+    public ProfilePage setNewAvatar(String path) {
+        uploadNewPictureButton.uploadFromClasspath(path);
+        saveChangesButton.click();
         return this;
     }
 
