@@ -88,14 +88,6 @@ public class SpendingTest {
         ));
     }
 
-//    Написать скриншотные тесты на аватарку в профиле
-//    на Компонент статистики.
-//    Тесты должны в том числе проверять
-
-//    - редактировании spending,
-//    - отображение архивных трат.
-//    Помимо проверки скришотов, проверять и ячейки под статистикой (тут скриншот не нужны)
-
     @User(
             spendings = {
                     @Spending(
@@ -111,7 +103,7 @@ public class SpendingTest {
             }
     )
     @ScreenShotTest("img/spendings/expected-stat.png")
-    void checkStatComponentAfterDeleteSpendingTest(UserJson user, BufferedImage expected) throws IOException {
+    void checkStatComponentAfterDeleteSpendingTest(UserJson user, BufferedImage expected) {
         Selenide.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .assertCategoriesMatchByName()
@@ -129,7 +121,7 @@ public class SpendingTest {
 
     )
     @ScreenShotTest("img/spendings/expected-stat.png")
-    void checkStatComponentAfterEditSpendingTest(UserJson user, BufferedImage expected) throws IOException {
+    void checkStatComponentAfterEditSpendingTest(UserJson user, BufferedImage expected) {
         Selenide.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .assertCategoriesMatchByName()
@@ -154,7 +146,7 @@ public class SpendingTest {
 
     )
     @ScreenShotTest("img/spendings/expected-spending-archive.png")
-    void checkStatComponentWithArchivedSpendingTest(UserJson user, BufferedImage expected) throws IOException {
+    void checkStatComponentWithArchivedSpendingTest(UserJson user, BufferedImage expected) {
         Selenide.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToProfilePage()
