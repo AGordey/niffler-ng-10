@@ -36,8 +36,8 @@ public class MainPage extends BasePage<MainPage> {
     private final SelenideElement allPeople = $(withText("All People"));
     private final SelenideElement searchField = $("input[aria-label='search']");
     private final SelenideElement deleteButton = $("#delete");
-    SpendingTable spendingTableComponent = new SpendingTable();
-    SearchField searchFieldComponent = new SearchField();
+    private final SpendingTable spendingTableComponent = new SpendingTable();
+    private final SearchField searchFieldComponent = new SearchField();
     private final SelenideElement chart = $("#chart canvas");
     // Элементы таблицы: категории в колонке "Category"
     private ElementsCollection tableCategories = $$("tbody tr td:nth-child(2) span");
@@ -136,9 +136,14 @@ public class MainPage extends BasePage<MainPage> {
 
     @Nonnull
     @Step("Проверка скриншотов кружка статистики")
-    public MainPage checkChartImage(BufferedImage expected) throws IOException {
+    public MainPage checkChartImage(BufferedImage expected) {
         Selenide.sleep(2500);
-        BufferedImage actual = ImageIO.read(chart.screenshot());
+        BufferedImage actual = null;
+        try {
+            actual = ImageIO.read(chart.screenshot());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         assertFalse(new ScreenDiffResult(actual, expected));
         return this;
     }
