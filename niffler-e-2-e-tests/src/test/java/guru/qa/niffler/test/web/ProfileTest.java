@@ -19,7 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @WebTest
@@ -102,7 +102,7 @@ public class ProfileTest {
                 .checkSnackbarText("Profile successfully updated");
         Selenide.sleep(1000);
         BufferedImage actual = ImageIO.read(Objects.requireNonNull($(".MuiAvatar-circular").screenshot()));
-        assertFalse(new ScreenDiffResult(expected,actual));
+        assertFalse(new ScreenDiffResult(expected, actual));
     }
 
 }

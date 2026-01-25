@@ -1,8 +1,6 @@
 package guru.qa.niffler.test.web;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.ScreenShotTest;
 import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
@@ -13,7 +11,6 @@ import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.util.ScreenDiffResult;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -29,11 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class SpendingTest {
 
     Header header = new Header();
-
-    @BeforeAll
-    static void set() {
-        Configuration.holdBrowserOpen = true;
-    }
 
     @User(
             spendings = {@Spending(
@@ -149,12 +141,12 @@ public class SpendingTest {
     }
 
     @User(
-            spendings ={
+            spendings = {
                     @Spending(
-                    category = "Обучение",
-                    description = "Тест 1",
-                    amount = 77777
-            ),@Spending(
+                            category = "Обучение",
+                            description = "Тест 1",
+                            amount = 77777
+                    ), @Spending(
                     category = "Обучение углубленное",
                     description = "Тест 2",
                     amount = 99999
