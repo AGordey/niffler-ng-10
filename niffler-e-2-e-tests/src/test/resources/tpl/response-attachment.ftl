@@ -14,9 +14,10 @@
 </head>
 <body>
 
-<h4>
-    Status code ${data.responseCode}
-</h4>
+<div>
+  Status code 
+  <#if data.responseCode??>${data.responseCode} <#else>Unknown</#if>
+</div>
 
 <#if data.body??>
     <h4>Body</h4>

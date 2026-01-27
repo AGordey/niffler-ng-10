@@ -65,10 +65,12 @@
     <h4>No form parameters</h4>
 </#if>
 
-<h4>Curl</h4>
-<div>
-    ${data.curl}
-</div>
+<#if data.curl??>
+    <h4>Curl</h4>
+    <div>
+        ${data.curl}
+    </div>
+</#if>
 
 </body>
 </html>
