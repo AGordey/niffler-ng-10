@@ -10,17 +10,13 @@ import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.component.Header;
-import guru.qa.niffler.util.ScreenDiffResult;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import static com.codeborne.selenide.Selenide.$;
 import static guru.qa.niffler.util.RandomDataUtils.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @WebTest
 public class SpendingTest {
@@ -69,6 +65,7 @@ public class SpendingTest {
     }
 
 
+    @SneakyThrows
     @User(
             spendings = @Spending(
                     category = "Обучение",
@@ -76,16 +73,12 @@ public class SpendingTest {
                     amount = 79990
             )
     )
-    @ScreenShotTest("img/spendings/expected-stat.png")
-    void checkStatComponentTest(UserJson user, BufferedImage expected) throws IOException {
+    @ScreenShotTest(value = "img/spendings/expected-stat.png")
+    void checkStatComponentTest(UserJson user, BufferedImage expected) {
         Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password());
+                .login(user.username(), user.testData().password())
+                .checkChartImage(expected);
 
-        BufferedImage actual = ImageIO.read($("canvas[role='img']").screenshot());
-        assertFalse(new ScreenDiffResult(
-                expected,
-                actual
-        ));
     }
 
     @User(
@@ -102,7 +95,7 @@ public class SpendingTest {
                     )
             }
     )
-    @ScreenShotTest("img/spendings/expected-stat.png")
+    @ScreenShotTest(value = "img/spendings/expected-stat.png")
     void checkStatComponentAfterDeleteSpendingTest(UserJson user, BufferedImage expected) {
         Selenide.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
@@ -120,7 +113,7 @@ public class SpendingTest {
             )
 
     )
-    @ScreenShotTest("img/spendings/expected-stat.png")
+    @ScreenShotTest(value = "img/spendings/expected-stat.png")
     void checkStatComponentAfterEditSpendingTest(UserJson user, BufferedImage expected) {
         Selenide.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
@@ -145,7 +138,7 @@ public class SpendingTest {
             )}
 
     )
-    @ScreenShotTest("img/spendings/expected-spending-archive.png")
+    @ScreenShotTest(value = "img/spendings/expected-spending-archive.png")
     void checkStatComponentWithArchivedSpendingTest(UserJson user, BufferedImage expected) {
         Selenide.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())

@@ -38,7 +38,7 @@ public class MainPage extends BasePage<MainPage> {
     private final SelenideElement deleteButton = $("#delete");
     private final SpendingTable spendingTableComponent = new SpendingTable();
     private final SearchField searchFieldComponent = new SearchField();
-    private final SelenideElement chart = $("#chart canvas");
+    private final SelenideElement chart = $("canvas[role='img']");
     // Элементы таблицы: категории в колонке "Category"
     private ElementsCollection tableCategories = $$("tbody tr td:nth-child(2) span");
     // Элементы легенды под диаграммой
@@ -137,7 +137,7 @@ public class MainPage extends BasePage<MainPage> {
     @Nonnull
     @Step("Проверка скриншотов кружка статистики")
     public MainPage checkChartImage(BufferedImage expected) {
-        Selenide.sleep(2500);
+        Selenide.sleep(3000);
         BufferedImage actual = null;
         try {
             actual = ImageIO.read(chart.screenshot());
