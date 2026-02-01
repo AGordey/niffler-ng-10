@@ -7,7 +7,7 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
-import static guru.qa.niffler.util.RandomDataUtils.randomUsername;
+import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 
 public class RegistrationTest {
 

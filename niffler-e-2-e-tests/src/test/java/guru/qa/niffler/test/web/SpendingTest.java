@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
 
-import static guru.qa.niffler.util.RandomDataUtils.*;
+import static guru.qa.niffler.utils.RandomDataUtils.*;
 
 @WebTest
 public class SpendingTest {

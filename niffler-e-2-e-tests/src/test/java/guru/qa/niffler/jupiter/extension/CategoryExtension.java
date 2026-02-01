@@ -13,7 +13,7 @@ import org.junit.platform.commons.support.AnnotationSupport;
 import java.util.*;
 
 import static guru.qa.niffler.jupiter.extension.TestMethodContextExtension.context;
-import static guru.qa.niffler.util.RandomDataUtils.randomCategoryName;
+import static guru.qa.niffler.utils.RandomDataUtils.randomCategoryName;
 
 public class CategoryExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 

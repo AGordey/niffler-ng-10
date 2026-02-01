@@ -7,7 +7,7 @@ import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static guru.qa.niffler.util.RandomDataUtils.randomUsername;
+import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 
 @WebTest
 public class LoginTest {
