@@ -1,17 +1,25 @@
 package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.jupiter.extension.ScreenShotTestExtension;
+import guru.qa.niffler.util.ScreenDiffResult;
 import io.qameta.allure.Step;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @ParametersAreNonnullByDefault
 public class ProfilePage extends BasePage<ProfilePage> {
@@ -20,6 +28,7 @@ public class ProfilePage extends BasePage<ProfilePage> {
 
     private final SelenideElement
             avatarOfUser = $("#PersonIcon"),
+            avatarForScreenshotTest = $("#image__input").parent().$("img"),
             uploadNewPictureButton = $("#image__input"),
             registerPasskeyButton = $(byText("Register Passkey")),
             saveChangesButton = $("button[type='submit']"),
@@ -120,6 +129,19 @@ public class ProfilePage extends BasePage<ProfilePage> {
     public ProfilePage setNewAvatar(String path) {
         uploadNewPictureButton.uploadFromClasspath(path);
         saveChangesButton.click();
+        return this;
+    }
+    @Step("Проверяем скриншот аватара в профиле")
+    @Nonnull
+    public ProfilePage checkAvatar(BufferedImage expected) throws IOException {
+        Selenide.sleep(1000);
+        BufferedImage actualImage = ImageIO.read(Objects.requireNonNull(avatarForScreenshotTest.screenshot()));
+        assertFalse(
+                new ScreenDiffResult(
+                        actualImage, expected
+                ),
+                ScreenShotTestExtension.ASSERT_SCREEN_MESSAGE
+        );
         return this;
     }
 

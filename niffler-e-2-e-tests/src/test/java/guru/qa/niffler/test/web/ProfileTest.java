@@ -10,14 +10,11 @@ import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.ProfilePage;
 import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.util.RandomDataUtils;
-import guru.qa.niffler.util.ScreenDiffResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Objects;
 
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -99,10 +96,8 @@ public class ProfileTest {
                 .checkThatPageLoaded()
                 .goToProfilePage()
                 .setNewAvatar("img/avatar/new-avatar.png")
-                .checkSnackbarText("Profile successfully updated");
-        Selenide.sleep(1000);
-        BufferedImage actual = ImageIO.read(Objects.requireNonNull($(".MuiAvatar-circular").screenshot()));
-        assertFalse(new ScreenDiffResult(expected, actual));
+                .checkSnackbarText("Profile successfully updated")
+                .checkAvatar(expected);
     }
 
 }
