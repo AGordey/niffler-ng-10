@@ -3,14 +3,18 @@ package guru.qa.niffler.page.component;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.model.DataFilterValues;
+import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.EditSpendingPage;
 import io.qameta.allure.Step;
+
+import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static guru.qa.niffler.condition.SpendConditions.haveSpendingInOrder;
 
 public class SpendingTable extends BaseComponent<SpendingTable> {
 
@@ -18,7 +22,7 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
     private final SelenideElement editSpendingButton = self.$("[aria-label='Edit spending']");
     private final ElementsCollection menuOfPeriod = $("[role='listbox']").$$("li");
     private final SelenideElement deleteButtonOnPage = self.$("#delete");
-    private final SelenideElement deleteButtonInDialog =  $("[aria-describedby='alert-dialog-slide-description']").$(byText("Delete"));
+    private final SelenideElement deleteButtonInDialog = $("[aria-describedby='alert-dialog-slide-description']").$(byText("Delete"));
     private final SearchField searchField = new SearchField();
     private final ElementsCollection spendingRows = self.$("tbody").$$("tr");
 
@@ -71,4 +75,12 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
         spendingRows.should(size(expectedSize));
         return this;
     }
+
+    @Step("Проверяем, что таблица содержит затраты ")
+    public SpendingTable checkSpendingsInOrder(List<SpendJson> expectedSpendings) {
+        spendingRows.should(haveSpendingInOrder(expectedSpendings));
+        return this;
+    }
+
+
 }
