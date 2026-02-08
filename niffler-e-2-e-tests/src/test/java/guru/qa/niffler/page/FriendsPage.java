@@ -1,6 +1,8 @@
 package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
@@ -19,14 +21,31 @@ public class FriendsPage extends BasePage<FriendsPage> {
 
     private static final String URL = CFG.frontUrl() + "people/friends";
 
-    private final SelenideElement tableWithAllFriends = $("#simple-tabpanel-friends");
-    private final SelenideElement alertWindow = $("[aria-describedby='alert-dialog-slide-description']");
+    private final SelenideElement tableWithAllFriends ;
+    private final SelenideElement alertWindow ;
+    private final SelenideElement requestsTable ;
+    private final SelenideElement allPeoplePage ;
+    private final SelenideElement searchField ;
+    private final ElementsCollection friendsRequests ;
 
-    private final SelenideElement requestsTable = $("#requests");
-    private final ElementsCollection friendsRequests = $$("#requests");
-    private final SelenideElement allPeoplePage = $(byText("All people"));
-    private final SelenideElement searchField = $("input[aria-label='search']");
+    public FriendsPage() {
+        this.tableWithAllFriends = Selenide.$("#simple-tabpanel-friends");
+        this.alertWindow = Selenide.$("[aria-describedby='alert-dialog-slide-description']");
+        this.requestsTable = Selenide. $("#requests");
+        this.allPeoplePage = Selenide.$(byText("All people"));
+        this.searchField = Selenide.$("input[aria-label='search']");
+        this.friendsRequests = Selenide.$$("#requests");
+    }
 
+    public FriendsPage(SelenideDriver driver) {
+        super(driver);
+        this.tableWithAllFriends = driver.$("#simple-tabpanel-friends");
+        this.alertWindow = driver.$("[aria-describedby='alert-dialog-slide-description']");
+        this.requestsTable =driver. $("#requests");
+        this.allPeoplePage = driver.$(byText("All people"));
+        this.searchField = driver.$("input[aria-label='search']");
+        this.friendsRequests = driver.$$("#requests");
+    }
 
     @Step("Проверяем, что пользователь '{expectedUsername}' находится в списке друзей")
     @Nonnull
