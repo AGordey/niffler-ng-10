@@ -1,6 +1,6 @@
 package guru.qa.niffler.test.web;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideDriver;
 import guru.qa.niffler.condition.Color;
 import guru.qa.niffler.jupiter.annotation.ScreenShotTest;
 import guru.qa.niffler.jupiter.annotation.Spending;
@@ -14,6 +14,7 @@ import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.page.component.SpendingTable;
 import guru.qa.niffler.page.component.StatComponent;
+import guru.qa.niffler.utils.SelenideUtils;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ import static guru.qa.niffler.utils.RandomDataUtils.*;
 
 @WebTest
 public class SpendingTest {
+
+    private final SelenideDriver driver = new SelenideDriver(SelenideUtils.chromeConfig);
 
     Header header = new Header();
 
@@ -40,7 +43,7 @@ public class SpendingTest {
         final String newDescription = "Обучение Niffler Next Generation";
         final String spendingDescription = user.testData().spendings().getFirst().description();
 
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .searchSpending(spendingDescription)
                 .editSpending(spendingDescription)
@@ -55,7 +58,7 @@ public class SpendingTest {
     @DisplayName("Добавление новой затраты")
     void addNewSpending(UserJson user) {
         String description = randomSentence(1);
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password());
         header.addSpendingPage()
                 .setAmount(String.valueOf(randomNumber()))
@@ -79,7 +82,7 @@ public class SpendingTest {
     )
     @ScreenShotTest(value = "img/spendings/expected-stat.png")
     void checkStatComponentTest(UserJson user, BufferedImage expected) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .checkChartImage(expected);
 
@@ -101,7 +104,7 @@ public class SpendingTest {
     )
     @ScreenShotTest(value = "img/spendings/expected-stat.png")
     void checkStatComponentAfterDeleteSpendingTest(UserJson user, BufferedImage expected) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .assertCategoriesMatchByName()
                 .deleteSpending("Ремонт машины")
@@ -119,7 +122,7 @@ public class SpendingTest {
     )
     @ScreenShotTest(value = "img/spendings/expected-stat.png")
     void checkStatComponentAfterEditSpendingTest(UserJson user, BufferedImage expected) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .assertCategoriesMatchByName()
                 .editSpending("Обучение Advanced 2.0")
@@ -145,11 +148,11 @@ public class SpendingTest {
     )
     @ScreenShotTest(value = "img/spendings/expected-spending-archive.png")
     void checkStatComponentWithArchivedSpendingTest(UserJson user, BufferedImage expected) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToProfilePage()
                 .makeCategoryArchive("Обучение");
-        Selenide.open(MainPage.URL, MainPage.class)
+        driver.open(MainPage.URL, MainPage.class)
                 .assertCategoriesMatchBySize()
                 .checkChartImage(expected);
     }
@@ -182,7 +185,7 @@ public class SpendingTest {
         };
 
         StatComponent statComponent = new StatComponent();
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password());
 
         statComponent.checkBubblesInOrder(bubbles);
@@ -217,7 +220,7 @@ public class SpendingTest {
         };
 
         StatComponent statComponent = new StatComponent();
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password());
         statComponent.checkBubblesInAnyOrder(bubbles);
 
@@ -250,7 +253,7 @@ public class SpendingTest {
         };
 
         StatComponent statComponent = new StatComponent();
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password());
         statComponent.checkBubblesContainSomeBubbles(bubbles);
 
@@ -279,7 +282,7 @@ public class SpendingTest {
     void checkSpendingsInTable(UserJson user) {
 
         SpendingTable spendingTable = new SpendingTable();
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password());
         spendingTable.checkSpendingsInOrder(user.testData().spendings());
 
