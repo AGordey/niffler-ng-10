@@ -12,26 +12,26 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowserExtension implements
+public class NonStaticBrowserExtension implements
         BeforeEachCallback,
         AfterEachCallback,
         TestExecutionExceptionHandler,
         LifecycleMethodExecutionExceptionHandler {
 
-    private final List<SelenideDriver> drivers = new ArrayList<>();
+    private static final ThreadLocal<List<SelenideDriver>> DRIVERS = ThreadLocal.withInitial(ArrayList::new);
 
-    public List<SelenideDriver> drivers() {
-        return drivers;
+    public static List<SelenideDriver> drivers() {
+        return DRIVERS.get();
     }
 
-
-    private void doScreenshot() {
-        for (SelenideDriver driver : drivers) {
+    private static void doScreenshot() {
+        for (SelenideDriver driver : DRIVERS.get()) {
             if (driver.hasWebDriverStarted()) {
                 Allure.addAttachment(
-                        "Screen on fail for browser: " + driver.getSessionId() +" "+ driver.browser().name,
+                        "Screen on fail for browser: " + driver.getSessionId(),
                         new ByteArrayInputStream(
-                                ((TakesScreenshot) driver.getWebDriver()).getScreenshotAs(OutputType.BYTES)
+                                ((TakesScreenshot) driver.getWebDriver())
+                                        .getScreenshotAs(OutputType.BYTES)
                         )
                 );
             }
@@ -48,17 +48,12 @@ public class BrowserExtension implements
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
-        for (SelenideDriver driver : drivers) {
+        for (SelenideDriver driver : DRIVERS.get()) {
             if (driver.hasWebDriverStarted()) {
                 driver.close();
             }
         }
-    }
-
-    @Override
-    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        doScreenshot();
-        throw throwable;
+        DRIVERS.remove();
     }
 
     @Override
@@ -73,10 +68,9 @@ public class BrowserExtension implements
         throw throwable;
     }
 
-//    @Override
-//    public void beforeAll(ExtensionContext context) throws Exception {
-//        Configuration.browser = Browser.CHROME.browserName();
-//        Configuration.timeout = 6000L;
-//    }
-
+    @Override
+    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+        doScreenshot();
+        throw throwable;
+    }
 }

@@ -1,21 +1,24 @@
 package guru.qa.niffler.test.web;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideDriver;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.utils.SelenideUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @WebTest
 public class FriendsTest {
 
+    private final SelenideDriver driver = new SelenideDriver(SelenideUtils.chromeConfig);
+
     @Test
     @User(friends = 1)
     @DisplayName("Должен отображаться список друзей")
     void friendShouldBePresentInFriendsTable(UserJson user) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToFriendsPage()
                 .searchFriends(user.testData().friends().getFirst().username())
@@ -26,7 +29,7 @@ public class FriendsTest {
     @User()
     @DisplayName("Таблица друзей должна быть пустой")
     void friendsTableShouldBeEmptyForNewUser(UserJson user) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToFriendsPage()
                 .checkNoExistingFriends();
@@ -36,7 +39,7 @@ public class FriendsTest {
     @User(outcomeInvitations = 1)
     @DisplayName("Должен отображаться входящий запрос на добавление в друзья")
     void incomeInvitationBePresentInFriendsTable(UserJson user) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToFriendsPage()
                 .searchFriends(user.testData().outcomeInvitations().getFirst().username())
@@ -47,7 +50,7 @@ public class FriendsTest {
     @User(incomeInvitations = 1)
     @DisplayName("Статус добавления в друзья должен быть в статусе Waiting...")
     void outcomeInvitationBePresentInAllPeoplesTable(UserJson user) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToAllPeoplePage()
                 .searchFriends(user.testData().incomeInvitations().getFirst().username())
@@ -60,7 +63,7 @@ public class FriendsTest {
     void acceptInvitationOfFriendship(UserJson user) {
         String nameOfUserWhoMadeIncomeInvitation = user.testData().outcomeInvitations().getFirst().username();
 
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToFriendsPage()
                 .checkExistingInvitations(nameOfUserWhoMadeIncomeInvitation)
@@ -76,7 +79,7 @@ public class FriendsTest {
     void declineInvitationOfFriendship(UserJson user) {
         String nameOfUserWhoMadeIncomeInvitation = user.testData().outcomeInvitations().getFirst().username();
 
-        Selenide.open(LoginPage.URL, LoginPage.class)
+        driver.open(LoginPage.URL, LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToFriendsPage()
                 .checkExistingInvitations(nameOfUserWhoMadeIncomeInvitation)

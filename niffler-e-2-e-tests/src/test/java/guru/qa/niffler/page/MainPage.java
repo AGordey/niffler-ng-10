@@ -2,6 +2,7 @@ package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.page.component.SearchField;
 import guru.qa.niffler.page.component.SpendingTable;
@@ -28,21 +29,58 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class MainPage extends BasePage<MainPage> {
 
     public static final String URL = CFG.frontUrl() + "main";
-    private final SelenideElement spendingTable = $("#spendings");
-    private final SelenideElement menuOfUser = $("[data-testid='PersonIcon']");
-    private final SelenideElement profileOfUser = $(withText("Profile"));
-    private final SelenideElement statisticsPart = $("#stat");
-    private final SelenideElement friendsPage = $(byText("Friends"));
-    private final SelenideElement allPeople = $(withText("All People"));
-    private final SelenideElement searchField = $("input[aria-label='search']");
-    private final SelenideElement deleteButton = $("#delete");
-    private final SpendingTable spendingTableComponent = new SpendingTable();
-    private final SearchField searchFieldComponent = new SearchField();
-    private final SelenideElement chart = $("canvas[role='img']");
+    private final SelenideElement spendingTable ;
+    private final SelenideElement menuOfUser ;
+    private final SelenideElement profileOfUser ;
+    private final SelenideElement statisticsPart ;
+    private final SelenideElement friendsPage ;
+    private final SelenideElement allPeople;
+    private final SelenideElement searchField ;
+    private final SelenideElement deleteButton ;
+    private final SpendingTable spendingTableComponent ;
+    private final SearchField searchFieldComponent ;
+    private final SelenideElement chart;
     // Элементы таблицы: категории в колонке "Category"
-    private ElementsCollection tableCategories = $$("tbody tr td:nth-child(2) span");
+    private ElementsCollection tableCategories ;
     // Элементы легенды под диаграммой
-    private ElementsCollection chartCategories = $$("#legend-container ul li");
+    private ElementsCollection chartCategories;
+
+    public MainPage(SelenideDriver driver) {
+        super(driver);
+        this.spendingTable = driver.$("#spendings");
+        this.menuOfUser = driver.$("[data-testid='PersonIcon']");
+        this.profileOfUser = driver.$(withText("Profile"));
+        this.statisticsPart = driver.$("#stat");
+        this.friendsPage = driver.$(byText("Friends"));
+        this.allPeople = driver.$(withText("All People"));
+        this.searchField = driver.$("input[aria-label='search']");
+        this.deleteButton = driver.$("#delete");
+        this.spendingTableComponent = new SpendingTable();
+        this.searchFieldComponent = new SearchField();
+        this.chart = driver.$("canvas[role='img']");
+        // Элементы таблицы: категории в колонке "Category"
+        this.tableCategories = driver.$$("tbody tr td:nth-child(2) span");
+        // Элементы легенды под диаграммой
+        this.chartCategories = driver.$$("#legend-container ul li");
+    }
+
+    public MainPage() {
+        this.spendingTable = Selenide.$("#spendings");
+        this.menuOfUser = Selenide.$("[data-testid='PersonIcon']");
+        this.profileOfUser = Selenide.$(withText("Profile"));
+        this.statisticsPart = Selenide.$("#stat");
+        this.friendsPage = Selenide.$(byText("Friends"));
+        this.allPeople = Selenide.$(withText("All People"));
+        this.searchField = Selenide.$("input[aria-label='search']");
+        this.deleteButton = Selenide.$("#delete");
+        this.spendingTableComponent = new SpendingTable();
+        this.searchFieldComponent = new SearchField();
+        this.chart = Selenide.$("canvas[role='img']");
+        // Элементы таблицы: категории в колонке "Category"
+        this.tableCategories = Selenide.$$("tbody tr td:nth-child(2) span");
+        // Элементы легенды под диаграммой
+        this.chartCategories = Selenide.$$("#legend-container ul li");
+    }
 
     @Step("Проверяем, что главная страница загружена")
     @Nonnull

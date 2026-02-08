@@ -1,23 +1,32 @@
 package guru.qa.niffler.test.web;
 
-import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.jupiter.annotation.DisabledByIssue;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import com.codeborne.selenide.SelenideDriver;
+import guru.qa.niffler.jupiter.annotation.Driver;
+import guru.qa.niffler.jupiter.annotation.User;
+import guru.qa.niffler.jupiter.converter.Browser;
+import guru.qa.niffler.jupiter.extension.NonStaticBrowserExtension;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
-import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
-
-@WebTest
+//@WebTest
 public class LoginTest {
 
-    @DisabledByIssue("2")
-    @Test
+    @RegisterExtension
+    private final NonStaticBrowserExtension browserExtension = new NonStaticBrowserExtension();
+
+    @EnumSource(value = Browser.class, names = {"CHROME", "FIREFOX"})
+    @ParameterizedTest
+    @User
     @DisplayName("Тест на регистрацию в зависимости от состояния проблемы указанной в аннотации")
-    void mainPageShouldBeDisplayedAfterSuccessLogin() {
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(randomUsername(), "12345")
-                .checkThatPageLoaded();
+    void mainPageShouldBeDisplayedAfterSuccessLogin(@Driver SelenideDriver driver, UserJson user) {
+        browserExtension.drivers().add(driver);
+        driver.open(LoginPage.URL);
+        new LoginPage(driver).login(user.username(), user.testData().password());
+        new MainPage(driver).checkThatPageLoaded();
     }
 }
