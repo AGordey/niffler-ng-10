@@ -1,34 +1,32 @@
 package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.SelenideDriver;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.jupiter.extension.BrowserExtension;
+import guru.qa.niffler.jupiter.annotation.Driver;
+import guru.qa.niffler.jupiter.annotation.User;
+import guru.qa.niffler.jupiter.converter.Browser;
+import guru.qa.niffler.jupiter.extension.NonStaticBrowserExtension;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
-import guru.qa.niffler.utils.SelenideUtils;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
-import java.util.List;
-
-@WebTest
+//@WebTest
 public class LoginTest {
 
     @RegisterExtension
-    private final BrowserExtension browserExtension = new BrowserExtension();
-    private final SelenideDriver chrome = new SelenideDriver(SelenideUtils.chromeConfig);
-    private final SelenideDriver firefox = new SelenideDriver(SelenideUtils.firefoxConfig);
-    //    @DisabledByIssue("2")
-    @Test
+    private final NonStaticBrowserExtension browserExtension = new NonStaticBrowserExtension();
+
+    @EnumSource(value = Browser.class, names = {"CHROME", "FIREFOX"})
+    @ParameterizedTest
+    @User
     @DisplayName("Тест на регистрацию в зависимости от состояния проблемы указанной в аннотации")
-    void mainPageShouldBeDisplayedAfterSuccessLogin() {
-        browserExtension.drivers().addAll(List.of(chrome, firefox));
-        chrome.open(LoginPage.URL);
-        firefox.open(LoginPage.URL);
-        new LoginPage(chrome).login("ginny.kertzmann", "12345");
-        new MainPage(chrome).checkThatPageLoaded();
-        new LoginPage(firefox).login("ginny.kertzmann1", "12345");
-        new MainPage(firefox).checkThatPageLoaded();
+    void mainPageShouldBeDisplayedAfterSuccessLogin(@Driver SelenideDriver driver, UserJson user) {
+        browserExtension.drivers().add(driver);
+        driver.open(LoginPage.URL);
+        new LoginPage(driver).login(user.username(), user.testData().password());
+        new MainPage(driver).checkThatPageLoaded();
     }
 }
