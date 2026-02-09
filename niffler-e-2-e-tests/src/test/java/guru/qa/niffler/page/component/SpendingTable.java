@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static guru.qa.niffler.condition.SpendConditions.haveSpendingInOrder;
+import static guru.qa.niffler.condition.SpendConditions.*;
 
 public class SpendingTable extends BaseComponent<SpendingTable> {
 
@@ -79,6 +79,18 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
     @Step("Проверяем, что таблица содержит затраты ")
     public SpendingTable checkSpendingsInOrder(List<SpendJson> expectedSpendings) {
         spendingRows.should(haveSpendingInOrder(expectedSpendings));
+        return this;
+    }
+
+    @Step("Проверяем, что таблица содержит затраты без учета порядка ")
+    public SpendingTable checkSpendingsInAnyOrder(List<SpendJson> expectedSpendings) {
+        spendingRows.should(haveSpendingAnyOrder(expectedSpendings));
+        return this;
+    }
+
+    @Step("Проверяем, что таблица частично содержит затраты ")
+    public SpendingTable checkContainSpendings(List<SpendJson> expectedSpendings) {
+        spendingRows.should(spendingPartlyContains(expectedSpendings));
         return this;
     }
 

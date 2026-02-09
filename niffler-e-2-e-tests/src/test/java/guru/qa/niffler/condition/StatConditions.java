@@ -5,7 +5,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.WebElementsCondition;
 import guru.qa.niffler.model.Bubble;
-import io.grpc.internal.JsonUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebElement;
 
@@ -51,15 +50,19 @@ public class StatConditions {
                 if (expectedData.size() != elements.size()) {
                     return rejected(
                             String.format("Size mismatch (expected: %d, actual: %d)", expectedData.size(), elements.size()),
-                            elements
+                            webElementsToSet(elements)
                     );
                 }
-                Map<String, String> actualData = webelementsToMap(elements);
+                Map<String, String> actualData = webElementsToMap(elements);
                 //добавляю метод .toString() т.к. он преобразует в строку с учетом порядка
                 //и метод equals сравнит строки с учетом порядка
                 if (!expectedData.toString().equals(actualData.toString())) {
+                    Map<String, String> actualDataDiff = new LinkedHashMap<>(actualData);
+                    for (Map.Entry<String, String> expected : expectedData.entrySet()) {
+                        actualDataDiff.remove(expected.getKey(),expected.getValue());
+                    }
                     return rejected(
-                            String.format("Content mismatch (expected: %s, actual: %s)", expectedData, actualData),
+                            String.format("Content mismatch (expected: %s, actual: %s, mismatch in: %s)", expectedData, actualData, actualDataDiff),
                             actualData
                     );
                 }
@@ -87,13 +90,17 @@ public class StatConditions {
                 if (expectedData.size() != elements.size()) {
                     return rejected(
                             String.format("Size mismatch (expected: %d, actual: %d)", expectedData.size(), elements.size()),
-                            elements
+                            webElementsToSet(elements)
                     );
                 }
-                Set<String> actualData = webelementsToSet(elements);
+                Set<String> actualData = webElementsToSet(elements);
                 if (!expectedData.equals(actualData)) {
+                    Set<String> actualDataDiff = Set.copyOf(actualData);;
+                    for (String expected : expectedData) {
+                        actualDataDiff.remove(expected);
+                    }
                     return rejected(
-                            String.format("Content mismatch (expected: %s, actual: %s)", expectedData, actualData),
+                            String.format("Content mismatch (expected: %s, actual: %s, mismatch in: %s)", expectedData, actualData, actualDataDiff),
                             actualData
                     );
                 }
@@ -119,7 +126,7 @@ public class StatConditions {
                 if (expectedData.isEmpty()) {
                     throw new IllegalArgumentException("No expected bubbles given");
                 }
-                Set<String> actualData = webelementsToSet(elements);
+                Set<String> actualData = webElementsToSet(elements);
                 if (!actualData.containsAll(expectedData)) {
                     return rejected(
                             String.format("Content not contain (expected: %s, actual: %s)", expectedData, actualData),
@@ -144,7 +151,7 @@ public class StatConditions {
         return result;
     }
 
-    private static Map<String, String> webelementsToMap(List<WebElement> elements) {
+    private static Map<String, String> webElementsToMap(List<WebElement> elements) {
         Map<String, String> result = new LinkedHashMap<>();
         for (WebElement element : elements) {
             result.put(element.getCssValue("background-color"), element.getText());
@@ -160,7 +167,7 @@ public class StatConditions {
         return result;
     }
 
-    private static Set<String> webelementsToSet(List<WebElement> elements) {
+    private static Set<String> webElementsToSet(List<WebElement> elements) {
         Set<String> result = new HashSet<>();
         for (WebElement element : elements) {
             result.add(element.getCssValue("background-color") + "=" + element.getText());

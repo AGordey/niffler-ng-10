@@ -8,6 +8,7 @@ import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.Bubble;
 import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
@@ -19,6 +20,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static guru.qa.niffler.utils.RandomDataUtils.*;
 
@@ -283,6 +287,64 @@ public class SpendingTest {
                 .login(user.username(), user.testData().password());
         spendingTable.checkSpendingsInOrder(user.testData().spendings());
 
+    }
+
+    @User(
+            spendings = {
+                    @Spending(
+                            category = "Обучение",
+                            description = "Тест 1",
+                            amount = 77777
+                    ),
+                    @Spending(
+                            category = "Обучение углубленное",
+                            description = "Тест 2",
+                            amount = 55555
+                    ),
+                    @Spending(
+                            category = "Вождение",
+                            description = "Тест 3",
+                            amount = 45630
+                    )}
+
+    )
+    @Test
+    void checkSpendingsInTableWithoutOrder(UserJson user) {
+
+        SpendingTable spendingTable = new SpendingTable();
+        Selenide.open(LoginPage.URL, LoginPage.class)
+                .login(user.username(), user.testData().password());
+        spendingTable.checkSpendingsInAnyOrder(user.testData().spendings());
+    }
+
+    @User(
+            spendings = {
+                    @Spending(
+                            category = "Обучение",
+                            description = "Тест 1",
+                            amount = 77777
+                    ),
+                    @Spending(
+                            category = "Обучение углубленное",
+                            description = "Тест 2",
+                            amount = 55555
+                    ),
+                    @Spending(
+                            category = "Вождение",
+                            description = "Тест 3",
+                            amount = 45630
+                    )}
+
+    )
+    @Test
+    void checkSpendingsContainsInTable(UserJson user) {
+
+        List<SpendJson> expected = new ArrayList<>(Collections.singleton(user.testData().spendings().getFirst()));
+
+        SpendingTable spendingTable = new SpendingTable();
+        Selenide.open(LoginPage.URL, LoginPage.class)
+                .login(user.username(), user.testData().password());
+        spendingTable.checkContainSpendings(expected);
     }
 
 }
