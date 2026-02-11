@@ -24,15 +24,31 @@ public abstract class RestClient {
   private final OkHttpClient okHttpClient;
   private final Retrofit retrofit;
 
-  public RestClient(String baseUrl) {
-    this(baseUrl, JacksonConverterFactory.create(), false, null);
-  }
+    public RestClient(String baseUrl) {
+        this(baseUrl, false, JacksonConverterFactory.create(), HttpLoggingInterceptor.Level.HEADERS, null);
+    }
 
-  public RestClient(String baseUrl, boolean followRedirect) {
-    this(baseUrl, JacksonConverterFactory.create(), followRedirect, null);
-  }
+    public RestClient(String baseUrl, boolean followRedirect) {
+        this(baseUrl, followRedirect, JacksonConverterFactory.create(), HttpLoggingInterceptor.Level.HEADERS, null);
+    }
 
-  public RestClient(String baseUrl, Converter.Factory converterFactory, boolean followRedirect, @Nullable Interceptor... interceptors) {
+    public RestClient(String baseUrl, boolean followRedirect, Converter.Factory converterFactory) {
+        this(baseUrl, followRedirect, converterFactory, HttpLoggingInterceptor.Level.HEADERS, null);
+    }
+
+    public RestClient(String baseUrl, Converter.Factory converterFactory) {
+        this(baseUrl, false, converterFactory, HttpLoggingInterceptor.Level.HEADERS, null);
+    }
+
+    public RestClient(String baseUrl, boolean followRedirect, Interceptor... interceptors) {
+        this(baseUrl, followRedirect, JacksonConverterFactory.create(), HttpLoggingInterceptor.Level.HEADERS, interceptors);
+    }
+
+    public RestClient(String baseUrl, boolean followRedirect, Converter.Factory converterFactory, Interceptor... interceptors) {
+        this(baseUrl, followRedirect, converterFactory, HttpLoggingInterceptor.Level.HEADERS, interceptors);
+    }
+
+  public RestClient(String baseUrl, boolean followRedirect, Converter.Factory converterFactory, HttpLoggingInterceptor.Level level, @Nullable Interceptor... interceptors) {
     final OkHttpClient.Builder builder = new OkHttpClient.Builder()
         .followRedirects(followRedirect)
         .cookieJar(

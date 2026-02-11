@@ -1,13 +1,16 @@
 package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
+import guru.qa.niffler.jupiter.annotation.ApiLogin;
 import guru.qa.niffler.jupiter.annotation.DisabledByIssue;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
+import static java.lang.Thread.sleep;
 
 @WebTest
 public class LoginTest {
@@ -20,4 +23,5 @@ public class LoginTest {
                 .login(randomUsername(), "12345")
                 .checkThatPageLoaded();
     }
+
 }

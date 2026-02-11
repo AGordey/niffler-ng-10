@@ -2,6 +2,7 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.condition.Color;
+import guru.qa.niffler.jupiter.annotation.ApiLogin;
 import guru.qa.niffler.jupiter.annotation.ScreenShotTest;
 import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
@@ -10,12 +11,10 @@ import guru.qa.niffler.model.Bubble;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.page.component.SpendingTable;
 import guru.qa.niffler.page.component.StatComponent;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -39,13 +38,13 @@ public class SpendingTest {
                     description = "Обучение Niffler 2.0 юбилейный поток")}
     )
     @Test
+    @ApiLogin
     @DisplayName("Редактирование затраты")
     void spendingDescriptionShouldBeEditedByTableAction(UserJson user) {
         final String newDescription = "Обучение Niffler Next Generation";
         final String spendingDescription = user.testData().spendings().getFirst().description();
 
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password())
+        Selenide.open(MainPage.URL, MainPage.class)
                 .searchSpending(spendingDescription)
                 .editSpending(spendingDescription)
                 .setNewSpendingDescription(newDescription)
@@ -56,11 +55,11 @@ public class SpendingTest {
 
     @User()
     @Test
+    @ApiLogin
     @DisplayName("Добавление новой затраты")
     void addNewSpending(UserJson user) {
         String description = randomSentence(1);
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password());
+        Selenide.open(MainPage.URL, MainPage.class);
         header.addSpendingPage()
                 .setAmount(String.valueOf(randomNumber()))
                 .setCurrency(CurrencyValues.RUB)
@@ -73,7 +72,6 @@ public class SpendingTest {
     }
 
 
-    @SneakyThrows
     @User(
             spendings = @Spending(
                     category = "Обучение",
@@ -81,10 +79,10 @@ public class SpendingTest {
                     amount = 79990
             )
     )
+    @ApiLogin
     @ScreenShotTest(value = "img/spendings/expected-stat.png")
     void checkStatComponentTest(UserJson user, BufferedImage expected) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password())
+        Selenide.open(MainPage.URL, MainPage.class)
                 .checkChartImage(expected);
 
     }
@@ -103,10 +101,10 @@ public class SpendingTest {
                     )
             }
     )
+    @ApiLogin
     @ScreenShotTest(value = "img/spendings/expected-stat.png")
     void checkStatComponentAfterDeleteSpendingTest(UserJson user, BufferedImage expected) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password())
+        Selenide.open(MainPage.URL, MainPage.class)
                 .assertCategoriesMatchByName()
                 .deleteSpending("Ремонт машины")
                 .assertCategoriesMatchByName()
@@ -121,10 +119,10 @@ public class SpendingTest {
             )
 
     )
+    @ApiLogin
     @ScreenShotTest(value = "img/spendings/expected-stat.png")
     void checkStatComponentAfterEditSpendingTest(UserJson user, BufferedImage expected) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password())
+        Selenide.open(MainPage.URL, MainPage.class)
                 .assertCategoriesMatchByName()
                 .editSpending("Обучение Advanced 2.0")
                 .setAmount("79990")
@@ -147,10 +145,10 @@ public class SpendingTest {
                     )}
 
     )
+    @ApiLogin
     @ScreenShotTest(value = "img/spendings/expected-spending-archive.png")
     void checkStatComponentWithArchivedSpendingTest(UserJson user, BufferedImage expected) {
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password())
+        Selenide.open(MainPage.URL, MainPage.class)
                 .goToProfilePage()
                 .makeCategoryArchive("Обучение");
         Selenide.open(MainPage.URL, MainPage.class)
@@ -178,6 +176,7 @@ public class SpendingTest {
 
     )
     @Test
+    @ApiLogin
     void checkBubblesInOrder(UserJson user) {
         Bubble[] bubbles = new Bubble[]{
                 new Bubble(Color.YELLOW, "Обучение 77777 " + CurrencyValues.RUB.currencySign),
@@ -186,9 +185,7 @@ public class SpendingTest {
         };
 
         StatComponent statComponent = new StatComponent();
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password());
-
+        Selenide.open(MainPage.URL, MainPage.class);
         statComponent.checkBubblesInOrder(bubbles);
 
     }
@@ -213,6 +210,7 @@ public class SpendingTest {
 
     )
     @Test
+    @ApiLogin
     void checkFirstBubbleInAnyOrder(UserJson user) {
         Bubble[] bubbles = new Bubble[]{
                 new Bubble(Color.YELLOW, "Обучение 77777 " + CurrencyValues.RUB.currencySign),
@@ -221,8 +219,7 @@ public class SpendingTest {
         };
 
         StatComponent statComponent = new StatComponent();
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password());
+        Selenide.open(MainPage.URL, MainPage.class);
         statComponent.checkBubblesInAnyOrder(bubbles);
 
     }
@@ -247,6 +244,7 @@ public class SpendingTest {
 
     )
     @Test
+    @ApiLogin
     void checkBubbleContainSomeBubbles(UserJson user) {
         Bubble[] bubbles = new Bubble[]{
                 new Bubble(Color.GREEN, "Обучение углубленное 55555 " + CurrencyValues.RUB.currencySign),
@@ -254,8 +252,7 @@ public class SpendingTest {
         };
 
         StatComponent statComponent = new StatComponent();
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password());
+        Selenide.open(MainPage.URL, MainPage.class);
         statComponent.checkBubblesContainSomeBubbles(bubbles);
 
     }
@@ -280,11 +277,11 @@ public class SpendingTest {
 
     )
     @Test
+    @ApiLogin
     void checkSpendingsInTable(UserJson user) {
 
         SpendingTable spendingTable = new SpendingTable();
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password());
+        Selenide.open(MainPage.URL, MainPage.class);
         spendingTable.checkSpendingsInOrder(user.testData().spendings());
 
     }
@@ -309,11 +306,11 @@ public class SpendingTest {
 
     )
     @Test
+    @ApiLogin
     void checkSpendingsInTableWithoutOrder(UserJson user) {
 
         SpendingTable spendingTable = new SpendingTable();
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password());
+        Selenide.open(MainPage.URL, MainPage.class);
         spendingTable.checkSpendingsInAnyOrder(user.testData().spendings());
     }
 
@@ -337,13 +334,13 @@ public class SpendingTest {
 
     )
     @Test
+    @ApiLogin
     void checkSpendingsContainsInTable(UserJson user) {
 
         List<SpendJson> expected = new ArrayList<>(Collections.singleton(user.testData().spendings().getFirst()));
 
         SpendingTable spendingTable = new SpendingTable();
-        Selenide.open(LoginPage.URL, LoginPage.class)
-                .login(user.username(), user.testData().password());
+        Selenide.open(MainPage.URL, MainPage.class);
         spendingTable.checkContainSpendings(expected);
     }
 
