@@ -43,9 +43,9 @@ public interface AuthApi {
     @FormUrlEncoded
     Call<JsonNode> token(
             @Field("code") String code,
-            @Field(value = "redirect_uri", encoded = true) String redirect_uri,
-            @Field("code_verifier") String code_verifier,
-            @Field("grant_type") String grant_type,
-            @Field("client_id") String client_id
+            @Field(value = "redirect_uri", encoded = true) String redirectUri,
+            @Field("code_verifier") String codeVerifier,
+            @Field("grant_type") String grantType,
+            @Field("client_id") String clientId
     );
 }
