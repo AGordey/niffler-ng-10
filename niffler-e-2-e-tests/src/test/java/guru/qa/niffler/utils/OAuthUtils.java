@@ -10,7 +10,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 @ParametersAreNonnullByDefault
-public class OauthUtils {
+public class OAuthUtils {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     @Nonnull
