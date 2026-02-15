@@ -88,6 +88,6 @@ public final class AuthApiClient extends RestClient {
         if (response.body() != null) {
             return response.body().path("id_token").asText();
         }
-        return "";
+        throw new NullPointerException("Body of token call is null or doesn't contain id_token field") ;
     }
 }
