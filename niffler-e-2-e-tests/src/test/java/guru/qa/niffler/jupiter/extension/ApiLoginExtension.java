@@ -83,7 +83,7 @@ public class ApiLoginExtension implements BeforeEachCallback, ParameterResolver 
                         if (userFromUserExtension.isPresent()) {  //Обработка на случай, если мы генерируем юзера через @User, при указанных данных в @ApiLogin
                             throw new IllegalStateException("@User must not be present in case that @ApiLogin contains username or password!");
                         }
-                        UserExtension.setUser(user); // устанавливаем данные для логина в расширение https://youtu.be/Re0ZVj0aQOA?t=3070 т.к. он может понадобиться в методе parametrResolver @User
+                        UserExtension.setUser(user); // устанавливаем данные для логина в расширение "Лекция 11.2 OAUTH 2.0 + OIDC."?t=3070 т.к. он может понадобиться в методе parametrResolver @User
                         userToLogin = user; //Присваиваем данные в виде UserJson созданные в @ApiLogin
                     }
 
