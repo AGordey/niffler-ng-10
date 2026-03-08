@@ -17,7 +17,7 @@ public class BaseGraphQlTest {
   protected static final Config CFG = Config.getInstance();
 
   @RegisterExtension
-  protected static final ApiLoginExtension apiLoginExtension = ApiLoginExtension.rest();
+  protected static final ApiLoginExtension apiLoginExtension = ApiLoginExtension.restApiLoginExtension();
 
   protected static final ApolloClient apolloClient = new ApolloClient.Builder()
       .serverUrl(CFG.gatewayUrl() + "graphql")
