@@ -88,7 +88,7 @@ public class UserQueryController {
   private void checkSubQueries(@Nonnull DataFetchingEnvironment env, int depth, @Nonnull String... queryKeys) {
     for (String queryKey : queryKeys) {
       List<SelectedField> selectors = env.getSelectionSet().getFieldsGroupedByResultKey().get(queryKey);
-        if (queryKey.equals("friends") && selectors.size() > 1) {
+        if (queryKey.equals("friends") && selectors != null && selectors.size() > 1) {
             throw new TooManySubQueriesException("Can`t fetch sub-queries for friends of user friends");
         }
       if (selectors != null && selectors.size() > depth) {
